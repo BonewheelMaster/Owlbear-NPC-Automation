@@ -1,16 +1,16 @@
 {
-    "name": "TBD",
+    "name": "NPC-Automation",
     "version": "0.1.0",
     "manifest_version": 1,
     "description": "Automate the movement of simple NPCs.",
-    "icon": "https://bonewheelmaster.github.io/Owlbear-Extension-TBD/icon.png",
+    "icon": "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/icon.png",
     "author": "bonewheelmaster",
-    "background_url": "https://bonewheelmaster.github.io/Owlbear-Extension-TBD/background.html",
-    "homepage_url": "https://github.com/bonewheelmaster/Owlbear-Extension-TBD",
+    "background_url": "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/background.html",
+    "homepage_url": "https://github.com/bonewheelmaster/Owlbear-NPC-Automation",
     "action": {
         "title": "NPC Control Panel",
-        "icon": "https://bonewheelmaster.github.io/Owlbear-Extension-TBD/panel.svg",
-        "popover": "https://bonewheelmaster.github.io/Owlbear-Extension-TBD/panel.html",
+        "icon": "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/panel.svg",
+        "popover": "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/panel.html",
         "width": 250,
         "height": 450
     }

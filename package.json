@@ -1,8 +1,8 @@
 {
-  "name": "Owlbear-Extension-TBD",
+  "name": "NPC-Automation",
   "version": "0.1.0",
   "description": "Automate the movement of simple NPCs.",
-  "repository": "git@github.com:bonewheelmaster/Owlbear-Extension-TBD.git",
+  "repository": "git@github.com:bonewheelmaster/Owlbear-NPC-Automation.git",
   "author": "BonewheelMaster <bonewheelmaster@proton.me>",
   "license": "MIT",
   "scripts": {
