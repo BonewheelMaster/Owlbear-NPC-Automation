@@ -1,0 +1,9 @@
+import{c as e,f as t,i as n,n as r,o as i,s as a}from"./util-DFvZsEHX.js";import{i as o,n as s}from"./npc-operations-CvaFvEAh.js";async function c(){let e=await t.scene.items.getItems(),r=await t.player.getSelection();return r===void 0?[]:r.map(t=>n(e,t)).filter(e=>e!==null)}async function l(){let e=await c();o(e)}async function u(){let e=await c();return r(e)}function d(e){if(e.length>=1){let t=e[0].meta;if(e.every(e=>a(e.meta,t)))return[`Agreed`,t];if(e.every(e=>e.meta.kind==t.kind))return[`Partial`,t.kind]}return`Disagreed`}document.querySelector(`#disableButton`)?.addEventListener(`click`,l),t.onReady(async()=>{let t=await u(),n=d(t),r;n!=`Disagreed`&&(r=n[0]==`Agreed`?n[1].kind:n[1]);let a=document.querySelector(`#Form`);if(a===null)return;a.innerHTML=`
+        <p>NPC Type: </p>
+        <select id="npcTypeDropDown">
+            <option ${r==`MELEE`?`Selected`:``}
+                value=${i} >Melee</option>
+            <option ${r==`RANGED`?`Selected`:``}
+                value=${e}>Ranged</option>
+        </select>
+    `;let o=document.querySelector(`#npcTypeDropDown`);o!==null&&o.addEventListener(`change`,()=>{s(o.value,t),console.log(t)})});
