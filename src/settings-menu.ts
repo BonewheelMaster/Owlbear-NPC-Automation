@@ -29,12 +29,12 @@ export async function getSelectedNPCs() : Promise<state.NPC[]> {
 //
 // The following describes how conflicts are resolved:
 //      If there are no conflicts (all selected NPCs have the same values set),
-//      then this will return those values.
+//      then this will return those values, and "Agreed" as the first of a pair.
 //      If there are conflicts but all NPCs are the same AI type, this will
-//      return that type.
+//      return that type, and "Partial" as the first of a pair.
 //      Otherwise, this will return "Disagreed". Also returns this if nothing is selected.
 export function getNPCSettings(NPCs : state.NPC[])
-    : state.NPCAI | state.NPCAIType | "Disagreed" {
+    : ["Agreed", state.NPCAI] | ["Partial", state.NPCAIType] | "Disagreed" {
     // Only the NPCs are cared about because this menu will not appear if a
     // non-npc is included in the selection.
     if (NPCs.length >= 1) {
@@ -43,10 +43,10 @@ export function getNPCSettings(NPCs : state.NPC[])
         if (NPCs.every((npc) => {
             return state.NPCAIEqual(npc.meta , refNPCAI);
         })) {
-            return refNPCAI;
+            return ["Agreed", refNPCAI];
         }
         if (NPCs.every((npc) => { return npc.meta.kind == refNPCAI.kind; })) {
-            return refNPCAI.kind;
+            return ["Partial", refNPCAI.kind];
         }
     }
     return "Disagreed";
