@@ -1,6 +1,4 @@
 import * as state from "./state";
-export const ID = "Owlbear-Extension-TBD/io.github.bonewheelmaster";
-export const STATE = `${ID}/state`;
 export function distance(p1, p2) {
     return Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2);
 }
@@ -16,10 +14,10 @@ export function round(x, y) {
 export function filterNPCs(items) {
     const npcs = [];
     for (const item of items) {
-        if (!state.validMetadata(item.metadata[STATE])) {
+        if (!state.validMetadata(item.metadata[state.STATE])) {
             continue;
         }
-        npcs.push({ ...item, meta: item.metadata[STATE] });
+        npcs.push({ ...item, meta: item.metadata[state.STATE] });
     }
     return npcs;
 }

@@ -4,7 +4,7 @@ export const MELEE  = "MELEE";
 export const RANGED = "RANGED";
 
 // The ID of this app, for use in metadata objects.
-export const ID = "Owlbear-Extension-TBD/io.github.bonewheelmaster";
+export const ID = "Owlbear-NPC-Automation/io.github.bonewheelmaster";
 // The key in metadata that we have jurisdiction over
 export const STATE = `${ID}/state`
 

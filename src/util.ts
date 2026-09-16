@@ -2,9 +2,6 @@ import OBR, { Item, Vector2, BoundingBox } from "@owlbear-rodeo/sdk";
 
 import * as state from "./state";
 
-export const ID    = "Owlbear-Extension-TBD/io.github.bonewheelmaster";
-export const STATE = `${ID}/state`
-
 export function distance(p1 : Vector2, p2 : Vector2) : number {
     return Math.sqrt((p2.x-p1.x)**2 + (p2.y-p1.y)**2);
 }
@@ -24,8 +21,8 @@ export function filterNPCs(items: Item[]) : state.NPC[] {
     const npcs = [];
 
     for (const item of items) {
-        if (! state.validMetadata(item.metadata[STATE])) { continue; }
-        npcs.push({ ...item, meta: item.metadata[STATE] });
+        if (! state.validMetadata(item.metadata[state.STATE])) { continue; }
+        npcs.push({ ...item, meta: item.metadata[state.STATE] });
     }
     return npcs;
 }

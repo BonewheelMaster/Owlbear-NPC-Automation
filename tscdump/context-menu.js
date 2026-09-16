@@ -17,7 +17,7 @@ export const NPCEnabledFilter = { every: [{ key: "layer", value: "CHARACTER" },
 export const menuInfo = {
     id: state.ID + "/menuInfo",
     // TODO see if these urls can be relative
-    icons: [{ icon: "https://bonewheelmaster.github.io/Owlbear-Extension-TBD/panel.svg",
+    icons: [{ icon: "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/panel.svg",
             label: "Info -> Console",
             filter: { roles: ["GM"] }
         }],
@@ -26,7 +26,7 @@ export const menuInfo = {
 // Requires that the token is already initialized.
 export const menuHardcodeId = {
     id: state.ID + "/hardcodeId",
-    icons: [{ icon: "https://bonewheelmaster.github.io/Owlbear-Extension-TBD/panel.svg",
+    icons: [{ icon: "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/panel.svg",
             label: "Hardcode target ID",
             filter: { roles: ["GM"] }
         }],
@@ -34,7 +34,7 @@ export const menuHardcodeId = {
 };
 export const menuAdd = {
     id: state.ID + "/menuAdd",
-    icons: [{ icon: "https://bonewheelmaster.github.io/Owlbear-Extension-TBD/panel.svg",
+    icons: [{ icon: "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/panel.svg",
             label: "Enable NPC",
             filter: NPCDisabledFilter
         }],
@@ -42,11 +42,11 @@ export const menuAdd = {
 };
 export const menuSettings = {
     id: state.ID + "/menuSettings",
-    icons: [{ icon: "https://bonewheelmaster.github.io/Owlbear-Extension-TBD/panel.svg",
+    icons: [{ icon: "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/panel.svg",
             label: "NPC Settings",
             filter: NPCEnabledFilter
         }],
-    embed: { url: "https://bonewheelmaster.github.io/Owlbear-Extension-TBD/settings-menu.html" },
+    embed: { url: "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/settings-menu.html" },
 };
 export function main() {
     OBR.contextMenu.create(menuInfo);
