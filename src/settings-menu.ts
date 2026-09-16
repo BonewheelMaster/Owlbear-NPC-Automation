@@ -55,15 +55,26 @@ export function getNPCSettings(NPCs : state.NPC[])
 const menu = async () => {
     const selNPCs  = await getSelectedNPCs();
     const settings = getNPCSettings(selNPCs);
-    const form     = document.querySelector("#Form");
+    let NPCType
+    if (settings != "Disagreed") {
+        if (settings[0] == "Agreed") {
+            NPCType = settings[1].kind;
+        }
+        else {
+            NPCType = settings[1];
+        }
+    }
+
+    const form = document.querySelector("#Form");
     if (form === null) { return; }
 
-    // TODO handle the other two return types of settings.
     form.innerHTML = `
         <p>NPC Type: </p>
         <select id="npcTypeDropDown">
-            <option selected value=${state.MELEE} >Melee</option>
-            <option          value=${state.RANGED}>Ranged</option>
+            <option ${NPCType == state.MELEE  ? "Selected" : ""}
+                value=${state.MELEE} >Melee</option>
+            <option ${NPCType == state.RANGED ? "Selected" : ""}
+                value=${state.RANGED}>Ranged</option>
         </select>
     `;
     const npcTypeDropDown = document.querySelector("#npcTypeDropDown") as HTMLSelectElement;
