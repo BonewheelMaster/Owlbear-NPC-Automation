@@ -8,10 +8,10 @@ import{c as e,f as t,i as n,n as r,o as i,s as a}from"./util-DFvZsEHX.js";import
                 value=${e}>Ranged</option>
         </select>
         <div id="typeSpecificSettings></div>
-    `;let s=document.querySelector(`#npcTypeDropDown`);if(s!==null)switch(s.addEventListener(`change`,()=>{c(s.value,t)}),r){case`None`:return;case i:let n=document.querySelector(`#typeSpecificSettings`);if(n===null)return;n.innerHTML+=`
+    `;let s=document.querySelector(`#npcTypeDropDown`);if(s!==null)switch(s.addEventListener(`change`,()=>{c(s.value,t)}),r){case`None`:return;case i:let n=document.querySelector(`#typeSpecificSettings`);if(n===null)break;n.innerHTML=`
                 <label for="speedInput">Speed:</label>
                 <input type="number" id="speedInput"/>
 
                 <label for="targetInput">Target ID:</label>
                 <input type="text" id="targetInput"/>
-            `;let r=document.querySelector(`#speedInput`);if(r===null)return;r.addEventListener(`change`,()=>{o(e=>e.kind==`MELEE`?{...e,speed:parseInt(r.value)}:e,t)});break;case e:}});
+            `;let r=document.querySelector(`#speedInput`);if(r===null)break;r.addEventListener(`change`,()=>{o(e=>e.kind==`MELEE`?{...e,speed:parseInt(r.value)}:e,t)});break;case e:}});

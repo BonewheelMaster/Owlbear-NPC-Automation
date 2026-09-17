@@ -90,8 +90,8 @@ const menu = async () => {
         case "None": return;
         case state.MELEE:
             const typeSpecificSettings = document.querySelector("#typeSpecificSettings");
-            if (typeSpecificSettings === null) { return; }
-            typeSpecificSettings.innerHTML += `
+            if (typeSpecificSettings === null) { break; }
+            typeSpecificSettings.innerHTML = `
                 <label for="speedInput">Speed:</label>
                 <input type="number" id="speedInput"/>
 
@@ -99,7 +99,7 @@ const menu = async () => {
                 <input type="text" id="targetInput"/>
             `;
             const speedInput = document.querySelector("#speedInput") as HTMLInputElement;
-            if (speedInput === null) { return; }
+            if (speedInput === null) { break; }
             speedInput.addEventListener("change", () => {
                 npcOps.updateNPCs(
                     (meta) => { if (meta.kind == state.MELEE) {
