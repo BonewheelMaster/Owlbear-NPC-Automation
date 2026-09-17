@@ -99,15 +99,14 @@ const menu = async () => {
 
             typeSpecificSettings.innerHTML = `
                 <label for="speedInput">Speed:</label>
-                <input type="text" id="speedInput"
-                    value=${settings[0] == "Agreed" ? settings[1].speed : ""}/>
+                <input type="number" id="speedInput"/>
 
                 <label for="targetInput">Target ID:</label>
-                <input type="text" id="targetInput"
-                    value=${settings[0] == "Agreed" ? settings[1].target : ""}/>
+                <input type="text" id="targetInput"/>
             `;
             const speedInput = document.querySelector("#speedInput") as HTMLInputElement;
             if (speedInput === null) { break; }
+            if (settings[0] == "Agreed") { speedInput.value = settings[1].speed.toString(); }
             speedInput.addEventListener("input", () => {
                 npcOps.updateNPCs(
                     (meta) => { const newSpeed = parseInt(speedInput.value);
@@ -119,6 +118,7 @@ const menu = async () => {
             });
             const targetInput = document.querySelector("#targetInput") as HTMLInputElement;
             if (targetInput === null) { break; }
+            if (settings[0] == "Agreed") { targetInput.value = settings[1].target.toString(); }
             targetInput.addEventListener("input", () => {
                 npcOps.updateNPCs(
                     (meta) => { if (meta.kind == state.MELEE) {
