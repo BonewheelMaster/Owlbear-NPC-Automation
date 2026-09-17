@@ -77,7 +77,6 @@ const menu = async () => {
     }
     npcTypeDropDown.addEventListener("change", () => {
         npcOps.changeType(npcTypeDropDown.value, selNPCs);
-        menu(); // To reload the type-specific settings
     });
     switch (NPCType) {
         case "None": return;
