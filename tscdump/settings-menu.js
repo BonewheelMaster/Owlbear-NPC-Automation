@@ -61,7 +61,7 @@ const menu = async () => {
         return;
     }
     form.innerHTML = `
-        <p>NPC Type: </p>
+        <label for="npcTypeDropDown">NPC Type:</label>
         <select id="npcTypeDropDown">
             <option hidden disabled ${NPCType == "None" ? "selected" : ""} value></option>
             <option ${NPCType == state.MELEE ? "selected" : ""}
