@@ -100,7 +100,7 @@ const menu = async () => {
             `;
             const speedInput = document.querySelector("#speedInput") as HTMLInputElement;
             if (speedInput === null) { break; }
-            speedInput.addEventListener("change", () => {
+            speedInput.addEventListener("input", () => {
                 npcOps.updateNPCs(
                     (meta) => { if (meta.kind == state.MELEE) {
                                     return { ...meta, speed : parseInt(speedInput.value) };

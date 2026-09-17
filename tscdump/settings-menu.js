@@ -96,7 +96,7 @@ const menu = async () => {
             if (speedInput === null) {
                 break;
             }
-            speedInput.addEventListener("change", () => {
+            speedInput.addEventListener("input", () => {
                 npcOps.updateNPCs((meta) => {
                     if (meta.kind == state.MELEE) {
                         return { ...meta, speed: parseInt(speedInput.value) };
