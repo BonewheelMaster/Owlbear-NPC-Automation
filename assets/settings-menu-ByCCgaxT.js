@@ -7,8 +7,8 @@ import{c as e,f as t,i as n,n as r,o as i,s as a}from"./util-DFvZsEHX.js";import
             <option ${r==`RANGED`?`selected`:``}
                 value=${e}>Ranged</option>
         </select>
-        <div id="typeSpecificSettings></div>
-    `;let s=document.querySelector(`#npcTypeDropDown`);if(s!==null)switch(s.addEventListener(`change`,()=>{c(s.value,t)}),r){case`None`:return;case i:let n=document.querySelector(`#typeSpecificSettings`);if(n===null){console.log(`asd`);break}n.innerHTML=`
+        <div id="typeSpecificSettings"></div>
+    `;let s=document.querySelector(`#npcTypeDropDown`);if(s!==null)switch(s.addEventListener(`change`,()=>{c(s.value,t)}),r){case`None`:return;case i:let n=document.querySelector(`#typeSpecificSettings`);if(n===null)break;n.innerHTML=`
                 <label for="speedInput">Speed:</label>
                 <input type="number" id="speedInput"/>
 
