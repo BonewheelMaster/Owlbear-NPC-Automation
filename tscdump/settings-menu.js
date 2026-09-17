@@ -94,7 +94,6 @@ const menu = async () => {
             `;
             const speedInput = document.querySelector("#speedInput");
             if (speedInput === null) {
-                console.log("a");
                 break;
             }
             speedInput.addEventListener("input", () => {

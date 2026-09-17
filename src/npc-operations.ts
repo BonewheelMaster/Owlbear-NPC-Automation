@@ -37,6 +37,7 @@ export function updateNPCs(f : (npc : state.NPCAI) => state.NPCAI, items : Item[
         const npcs = util.filterNPCs(items);
         for (let npc of npcs) {
             npc.meta = f(npc.meta);
+            console.log(npc.meta);
         }
     });
 }
