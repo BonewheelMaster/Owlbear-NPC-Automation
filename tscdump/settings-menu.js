@@ -115,6 +115,20 @@ const menu = async () => {
                     }
                 }, selNPCs);
             });
+            const targetInput = document.querySelector("#targetInput");
+            if (targetInput === null) {
+                break;
+            }
+            targetInput.addEventListener("input", () => {
+                npcOps.updateNPCs((meta) => {
+                    if (meta.kind == state.MELEE) {
+                        return { ...meta, target: targetInput.value };
+                    }
+                    else {
+                        return meta;
+                    }
+                }, selNPCs);
+            });
             break;
         case state.RANGED:
             break;
