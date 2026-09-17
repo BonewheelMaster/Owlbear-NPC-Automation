@@ -33,13 +33,16 @@ export function updateTokens(newState : state.NPCAI, items : Item[]) {
 }
 
 export function updateNPCs(f : (npc : state.NPCAI) => state.NPCAI, items : Item[]) {
-    OBR.scene.items.updateItems(items, (items) => {
-        const npcs = util.filterNPCs(items);
-        for (let npc of npcs) {
-            npc.meta = f(npc.meta);
-            npc.meta.speed = 46;
-        }
-    });
+//    OBR.scene.items.updateItems(items, (items) => {
+//        const npcs = util.filterNPCs(items);
+//        for (let npc of npcs) {
+//            npc.meta = f(npc.meta);
+//        }
+//    });
+    const npcs = util.filterNPCs(items);
+    for (let npc of npcs) {
+        updateTokens(f(npc.meta), [npc]);
+    }
 }
 
 export function changeType(newType : state.NPCAIType, items : Item[]) {

@@ -27,13 +27,16 @@ export function updateTokens(newState, items) {
     });
 }
 export function updateNPCs(f, items) {
-    OBR.scene.items.updateItems(items, (items) => {
-        const npcs = util.filterNPCs(items);
-        for (let npc of npcs) {
-            npc.meta = f(npc.meta);
-            npc.meta.speed = 46;
-        }
-    });
+    //    OBR.scene.items.updateItems(items, (items) => {
+    //        const npcs = util.filterNPCs(items);
+    //        for (let npc of npcs) {
+    //            npc.meta = f(npc.meta);
+    //        }
+    //    });
+    const npcs = util.filterNPCs(items);
+    for (let npc of npcs) {
+        updateTokens(f(npc.meta), [npc]);
+    }
 }
 export function changeType(newType, items) {
     OBR.scene.items.updateItems(items, (items) => {
