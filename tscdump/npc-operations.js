@@ -26,6 +26,14 @@ export function updateTokens(newState, items) {
         }
     });
 }
+export function updateNPCs(f, items) {
+    OBR.scene.items.updateItems(items, (items) => {
+        const npcs = util.filterNPCs(items);
+        for (let npc of npcs) {
+            npc.meta = f(npc.meta);
+        }
+    });
+}
 export function changeType(newType, items) {
     OBR.scene.items.updateItems(items, (items) => {
         for (let item of items) {

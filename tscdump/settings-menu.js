@@ -77,6 +77,34 @@ const menu = async () => {
     npcTypeDropDown.addEventListener("change", () => {
         npcOps.changeType(npcTypeDropDown.value, selNPCs);
     });
+    switch (NPCType) {
+        case "None": return;
+        case state.MELEE:
+            form.innerHTML += `
+                <label for="speedInput">Speed:</label>
+                <input type="number" id="speedInput"/>
+
+                <label for="targetInput">Target ID:</label>
+                <input type="text" id="targetInput"/>
+            `;
+            const speedInput = document.querySelector("#speedInput");
+            if (speedInput === null) {
+                return;
+            }
+            speedInput.addEventListener("change", () => {
+                npcOps.updateNPCs((meta) => {
+                    if (meta.kind == state.MELEE) {
+                        return { ...meta, speed: parseInt(speedInput.value) };
+                    }
+                    else {
+                        return meta;
+                    }
+                }, selNPCs);
+            });
+            break;
+        case state.RANGED:
+            break;
+    }
 };
 const disableButton = document.querySelector("#disableButton");
 if (disableButton != null) {
