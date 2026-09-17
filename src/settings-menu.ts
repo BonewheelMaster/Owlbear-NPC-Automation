@@ -90,7 +90,7 @@ const menu = async () => {
         case "None": return;
         case state.MELEE:
             const typeSpecificSettings = document.querySelector("#typeSpecificSettings");
-            if (typeSpecificSettings === null) { break; }
+            if (typeSpecificSettings === null) { console.log("asd"); break; }
             typeSpecificSettings.innerHTML = `
                 <label for="speedInput">Speed:</label>
                 <input type="number" id="speedInput"/>

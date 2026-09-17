@@ -83,6 +83,7 @@ const menu = async () => {
         case state.MELEE:
             const typeSpecificSettings = document.querySelector("#typeSpecificSettings");
             if (typeSpecificSettings === null) {
+                console.log("asd");
                 break;
             }
             typeSpecificSettings.innerHTML = `
