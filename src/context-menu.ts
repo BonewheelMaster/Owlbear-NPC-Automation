@@ -35,14 +35,13 @@ export const menuInfo = {
     onClick: ((context : ContextMenuContext) => { console.log(context.items); }),
 };
 
-// Requires that the token is already initialized.
-export const menuHardcodeId = {
-    id: state.ID + "/hardcodeId",
+export const copyId = {
+    id: state.ID + "/copyId",
     icons: [{ icon: "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/panel.svg"
-            , label: "Hardcode target ID"
+            , label: "Copy ID"
             , filter: { roles: ["GM"] } as ContextMenuIconFilter
            }],
-    onClick: (contextMap(npcOps.hardcodeIds)),
+    onClick: (contextMap(npcOps.copyId)),
 };
 
 export const menuAdd = {
@@ -68,5 +67,5 @@ export function main() {
     OBR.contextMenu.create(menuInfo);
     OBR.contextMenu.create(menuAdd);
     OBR.contextMenu.create(menuSettings);
-    OBR.contextMenu.create(menuHardcodeId);
+    OBR.contextMenu.create(copyId);
 }

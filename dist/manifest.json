@@ -13,5 +13,9 @@
         "popover": "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/panel.html",
         "width": 250,
         "height": 450
+    },
+    "allow": {
+        "name": "clipboard-write",
+        "reason": "To copy target IDs."
     }
 }
