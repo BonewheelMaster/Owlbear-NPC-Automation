@@ -77,7 +77,7 @@ const menu = async () => {
             <option ${NPCType == state.RANGED ? "selected" : ""}
                 value=${state.RANGED}>Ranged</option>
         </select>
-        <div id="typeSpecificSettings></div>
+        <div id="typeSpecificSettings"></div>
     `;
     const npcTypeDropDown = document.querySelector("#npcTypeDropDown") as HTMLSelectElement;
     if (npcTypeDropDown === null) { return; }
@@ -90,7 +90,7 @@ const menu = async () => {
         case "None": return;
         case state.MELEE:
             const typeSpecificSettings = document.querySelector("#typeSpecificSettings");
-            if (typeSpecificSettings === null) { console.log("asd"); break; }
+            if (typeSpecificSettings === null) { break; }
             typeSpecificSettings.innerHTML = `
                 <label for="speedInput">Speed:</label>
                 <input type="number" id="speedInput"/>
