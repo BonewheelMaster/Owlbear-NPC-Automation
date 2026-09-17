@@ -16,4 +16,4 @@ import{c as e,f as t,i as n,n as r,o as i,s as a}from"./util-DFvZsEHX.js";import
                 <label for="targetInput">Target ID:</label>
                 <input type="text" id="targetInput"
                     value=${n[0]==`Agreed`?n[1].target:``}/>
-            `;let a=document.querySelector(`#speedInput`);if(a===null)break;a.addEventListener(`input`,()=>{o(e=>{let t=parseInt(a.value);return e.kind==`MELEE`&&!isNaN(t)?{...e,speed:t}:e},t)});break;case e:}});
+            `;let a=document.querySelector(`#speedInput`);if(a===null)break;a.addEventListener(`input`,()=>{o(e=>{let t=parseInt(a.value);return e.kind==`MELEE`&&!isNaN(t)?{...e,speed:t}:e},t)});let s=document.querySelector(`#targetInput`);if(s===null)break;s.addEventListener(`input`,()=>{o(e=>e.kind==`MELEE`?{...e,target:s.value}:e,t)});break;case e:}});
