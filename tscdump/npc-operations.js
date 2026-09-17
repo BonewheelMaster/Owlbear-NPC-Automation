@@ -5,7 +5,6 @@ export function hardcodeIds(items) {
     OBR.scene.items.updateItems(items, (items) => {
         const npcs = util.filterNPCs(items);
         for (let npc of npcs) {
-            console.log(npc);
             npc.meta.target = "7c7c63a9-4a09-4632-9d8d-00bffd2ee66f";
         }
     });
@@ -32,7 +31,7 @@ export function updateNPCs(f, items) {
         const npcs = util.filterNPCs(items);
         for (let npc of npcs) {
             npc.meta = f(npc.meta);
-            console.log(npc.meta);
+            npc.meta.speed = 46;
         }
     });
 }
