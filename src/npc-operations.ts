@@ -3,9 +3,9 @@ import OBR, { Item } from "@owlbear-rodeo/sdk";
 import * as state from "./state";
 import * as util  from "./util";
 
-export function copyId(items : Item[]) {
+export function showId(items : Item[]) {
     if (items.length != 1) { return; }
-    navigator.clipboard.writeText(items[0].id);
+    OBR.notification.show(items[0].id, "INFO");
 }
 
 export function addTokens(items : Item[]) {

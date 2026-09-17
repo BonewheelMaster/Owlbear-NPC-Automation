@@ -23,13 +23,13 @@ export const menuInfo = {
         }],
     onClick: ((context) => { console.log(context.items); }),
 };
-export const copyId = {
-    id: state.ID + "/copyId",
+export const showId = {
+    id: state.ID + "/showId",
     icons: [{ icon: "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/panel.svg",
-            label: "Copy ID",
+            label: "Show ID",
             filter: { roles: ["GM"] }
         }],
-    onClick: (contextMap(npcOps.copyId)),
+    onClick: (contextMap(npcOps.showId)),
 };
 export const menuAdd = {
     id: state.ID + "/menuAdd",
@@ -51,5 +51,5 @@ export function main() {
     OBR.contextMenu.create(menuInfo);
     OBR.contextMenu.create(menuAdd);
     OBR.contextMenu.create(menuSettings);
-    OBR.contextMenu.create(copyId);
+    OBR.contextMenu.create(showId);
 }
