@@ -81,16 +81,24 @@ const menu = async () => {
     switch (NPCType) {
         case "None": return;
         case state.MELEE:
+            // NPCType not being "None" implies that settings is not "Disagreed",
+            // and therefore is a tuple with a first element. Regardless, TypeScript
+            // not seem to understand this, so this line is required.
+            if (settings == "Disagreed") {
+                break;
+            }
             const typeSpecificSettings = document.querySelector("#typeSpecificSettings");
             if (typeSpecificSettings === null) {
                 break;
             }
             typeSpecificSettings.innerHTML = `
                 <label for="speedInput">Speed:</label>
-                <input type="number" id="speedInput"/>
+                <input type="number" id="speedInput"
+                    value=${settings[0] == "Agreed" ? settings[1].speed : ""}/>
 
                 <label for="targetInput">Target ID:</label>
-                <input type="text" id="targetInput"/>
+                <input type="text" id="targetInput"
+                    value=${settings[0] == "Agreed" ? settings[1].target : ""}/>
             `;
             const speedInput = document.querySelector("#speedInput");
             if (speedInput === null) {
