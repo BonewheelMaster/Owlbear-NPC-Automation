@@ -55,7 +55,7 @@ export function getNPCSettings(NPCs : state.NPC[])
 const menu = async () => {
     const selNPCs  = await getSelectedNPCs();
     const settings = getNPCSettings(selNPCs);
-    let NPCType
+    let NPCType    = "None"
     if (settings != "Disagreed") {
         if (settings[0] == "Agreed") {
             NPCType = settings[1].kind;
@@ -71,9 +71,10 @@ const menu = async () => {
     form.innerHTML = `
         <p>NPC Type: </p>
         <select id="npcTypeDropDown">
-            <option ${NPCType == state.MELEE  ? "Selected" : ""}
+            <option hidden disabled ${NPCType == "None" ? "selected" : ""} value></option>
+            <option ${NPCType == state.MELEE  ? "selected" : ""}
                 value=${state.MELEE} >Melee</option>
-            <option ${NPCType == state.RANGED ? "Selected" : ""}
+            <option ${NPCType == state.RANGED ? "selected" : ""}
                 value=${state.RANGED}>Ranged</option>
         </select>
     `;
