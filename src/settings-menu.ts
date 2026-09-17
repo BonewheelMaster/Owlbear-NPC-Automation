@@ -102,8 +102,9 @@ const menu = async () => {
             if (speedInput === null) { break; }
             speedInput.addEventListener("input", () => {
                 npcOps.updateNPCs(
-                    (meta) => { if (meta.kind == state.MELEE) {
-                                    return { ...meta, speed : parseInt(speedInput.value) };
+                    (meta) => { const newSpeed = parseInt(speedInput.value);
+                               if (meta.kind == state.MELEE && !isNaN(newSpeed)) {
+                                    return { ...meta, speed : newSpeed };
                               } else { return meta; } }
                     , selNPCs
                 );
