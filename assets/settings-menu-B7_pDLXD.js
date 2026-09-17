@@ -7,4 +7,4 @@ import{c as e,f as t,i as n,n as r,o as i,s as a}from"./util-DFvZsEHX.js";import
             <option ${r==`RANGED`?`selected`:``}
                 value=${e}>Ranged</option>
         </select>
-    `;let o=document.querySelector(`#npcTypeDropDown`);o!==null&&o.addEventListener(`change`,()=>{s(o.value,t),console.log(t)})});
+    `;let o=document.querySelector(`#npcTypeDropDown`);o!==null&&o.addEventListener(`change`,()=>{s(o.value,t)})});
