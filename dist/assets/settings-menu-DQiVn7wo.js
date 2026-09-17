@@ -10,7 +10,7 @@ import{c as e,f as t,i as n,n as r,o as i,s as a}from"./util-DFvZsEHX.js";import
         <div id="typeSpecificSettings"></div>
     `;let s=document.querySelector(`#npcTypeDropDown`);if(s!==null)switch(s.addEventListener(`change`,()=>{c(s.value,t)}),r){case`None`:return;case i:if(n==`Disagreed`)break;let r=document.querySelector(`#typeSpecificSettings`);if(r===null)break;r.innerHTML=`
                 <label for="speedInput">Speed:</label>
-                <input type="number" id="speedInput"
+                <input type="text" id="speedInput"
                     value=${n[0]==`Agreed`?n[1].speed:``}/>
 
                 <label for="targetInput">Target ID:</label>

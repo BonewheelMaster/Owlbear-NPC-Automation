@@ -99,7 +99,7 @@ const menu = async () => {
 
             typeSpecificSettings.innerHTML = `
                 <label for="speedInput">Speed:</label>
-                <input type="number" id="speedInput"
+                <input type="text" id="speedInput"
                     value=${settings[0] == "Agreed" ? settings[1].speed : ""}/>
 
                 <label for="targetInput">Target ID:</label>
