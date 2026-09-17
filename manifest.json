@@ -14,8 +14,8 @@
         "width": 250,
         "height": 450
     },
-    "allow": {
+    "permissions": [{
         "name": "clipboard-write",
         "reason": "To copy target IDs."
-    }
+    }]
 }
