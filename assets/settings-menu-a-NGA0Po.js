@@ -8,10 +8,12 @@ import{c as e,f as t,i as n,n as r,o as i,s as a}from"./util-DFvZsEHX.js";import
                 value=${e}>Ranged</option>
         </select>
         <div id="typeSpecificSettings"></div>
-    `;let s=document.querySelector(`#npcTypeDropDown`);if(s!==null)switch(s.addEventListener(`change`,()=>{c(s.value,t)}),r){case`None`:return;case i:let n=document.querySelector(`#typeSpecificSettings`);if(n===null)break;n.innerHTML=`
+    `;let s=document.querySelector(`#npcTypeDropDown`);if(s!==null)switch(s.addEventListener(`change`,()=>{c(s.value,t)}),r){case`None`:return;case i:if(n==`Disagreed`)break;let r=document.querySelector(`#typeSpecificSettings`);if(r===null)break;r.innerHTML=`
                 <label for="speedInput">Speed:</label>
-                <input type="number" id="speedInput"/>
+                <input type="number" id="speedInput"
+                    value=${n[0]==`Agreed`?n[1].speed:``}/>
 
                 <label for="targetInput">Target ID:</label>
-                <input type="text" id="targetInput"/>
-            `;let r=document.querySelector(`#speedInput`);if(r===null)break;r.addEventListener(`input`,()=>{o(e=>{let t=parseInt(r.value);return e.kind==`MELEE`&&!isNaN(t)?{...e,speed:t}:e},t)});break;case e:}});
+                <input type="text" id="targetInput"
+                    value=${n[0]==`Agreed`?n[1].target:``}/>
+            `;let a=document.querySelector(`#speedInput`);if(a===null)break;a.addEventListener(`input`,()=>{o(e=>{let t=parseInt(a.value);return e.kind==`MELEE`&&!isNaN(t)?{...e,speed:t}:e},t)});break;case e:}});
