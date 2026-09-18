@@ -52,6 +52,7 @@ export function getNPCSettings(NPCs : state.NPC[])
     return "Disagreed";
 }
 
+// TODO This is a monster that must be slain/refactored.
 const menu = async () => {
     const selNPCs  = await getSelectedNPCs();
     const settings = getNPCSettings(selNPCs);
@@ -91,10 +92,10 @@ const menu = async () => {
         case state.MELEE:
             // NPCType not being "None" implies that settings is not "Disagreed",
             // and therefore is a tuple with a first element. Regardless, TypeScript
-            // not seem to understand this, so this line is required.
+            // does not seem to understand this, so this line is required.
             if (settings == "Disagreed") { break; }
 
-            const typeSpecificSettings = document.querySelector("#typeSpecificSettings");
+            var typeSpecificSettings = document.querySelector("#typeSpecificSettings");
             if (typeSpecificSettings === null) { break; }
 
             typeSpecificSettings.innerHTML = `
@@ -104,7 +105,7 @@ const menu = async () => {
                 <label for="targetInput">Target ID:</label>
                 <input type="text" id="targetInput"/>
             `;
-            const speedInput = document.querySelector("#speedInput") as HTMLInputElement;
+            var speedInput = document.querySelector("#speedInput") as HTMLInputElement;
             if (speedInput === null) { break; }
             if (settings[0] == "Agreed") { speedInput.value = settings[1].speed.toString(); }
             speedInput.addEventListener("input", () => {
@@ -116,7 +117,7 @@ const menu = async () => {
                     , selNPCs
                 );
             });
-            const targetInput = document.querySelector("#targetInput") as HTMLInputElement;
+            var targetInput = document.querySelector("#targetInput") as HTMLInputElement;
             if (targetInput === null) { break; }
             if (settings[0] == "Agreed") { targetInput.value = settings[1].target.toString(); }
             targetInput.addEventListener("input", () => {
@@ -128,7 +129,60 @@ const menu = async () => {
                 );
             });
             break;
+
         case state.RANGED:
+            if (settings == "Disagreed") { break; }
+
+            var typeSpecificSettings = document.querySelector("#typeSpecificSettings");
+            if (typeSpecificSettings === null) { break; }
+
+            typeSpecificSettings.innerHTML = `
+                <label for="speedInput">Speed:</label>
+                <input type="number" id="speedInput"/>
+
+                <label for="targetInput">Target ID:</label>
+                <input type="text" id="targetInput"/>
+
+                <label for="rangeInput">Range:</label>
+                <input type="number" id="rangeInput"/>
+            `;
+            var speedInput = document.querySelector("#speedInput") as HTMLInputElement;
+            if (speedInput === null) { break; }
+            if (settings[0] == "Agreed") { speedInput.value = settings[1].speed.toString(); }
+            speedInput.addEventListener("input", () => {
+                npcOps.updateNPCs(
+                    (meta) => { const newSpeed = parseInt(speedInput.value);
+                               if (meta.kind == state.RANGED && !isNaN(newSpeed)) {
+                                    return { ...meta, speed : newSpeed };
+                              } else { return meta; } }
+                    , selNPCs
+                );
+            });
+            var targetInput = document.querySelector("#targetInput") as HTMLInputElement;
+            if (targetInput === null) { break; }
+            if (settings[0] == "Agreed") { targetInput.value = settings[1].target.toString(); }
+            targetInput.addEventListener("input", () => {
+                npcOps.updateNPCs(
+                    (meta) => { if (meta.kind == state.RANGED) {
+                                    return { ...meta, target : targetInput.value };
+                              } else { return meta; } }
+                    , selNPCs
+                );
+            });
+            var rangeInput = document.querySelector("#rangeInput") as HTMLInputElement;
+            if (rangeInput === null) { break; }
+            if (settings[0] == "Agreed" && settings[1].kind == state.RANGED) {
+                rangeInput.value = settings[1].range.toString();
+            }
+            rangeInput.addEventListener("input", () => {
+                npcOps.updateNPCs(
+                    (meta) => { const newRange = parseInt(rangeInput.value);
+                                if (meta.kind == state.RANGED && !isNaN(newRange)) {
+                                    return { ...meta, range : newRange };
+                              } else { return meta; } }
+                    , selNPCs
+                );
+            });
             break;
     }
 }
