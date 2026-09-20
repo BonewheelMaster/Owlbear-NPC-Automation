@@ -11,21 +11,22 @@ export async function moveAll() {
     // NOTE Beeline strategy
     // TODO handle collision
     const dpi = await OBR.scene.grid.getDpi();
+    const stepSize = 5; // TODO hardcoded
     let newPositions : Record<string, Vector2> = {};
+
     for (let npc of npcs) { // This is done outside of the updateItems because it is async.
         newPositions[npc.id] = await OBR.scene.grid.snapPosition(npc.position, 1, false, true);
 
         const target = util.getTarget(items, npc.meta.target);
         if (target === null) { continue; }
 
-        // FIXME: if speed is not a multiple of 5 this will move more than allowed.
         let expendedMovement = 0;
-        while (expendedMovement < npc.meta.speed) {
-            const action = await meleeBasicMove(newPositions[npc.id], target.position);
+        while (!(expendedMovement + stepSize > npc.meta.speed)) {
+            const action = await meleeBasicMove(newPositions[npc.id], target.position, newPositions);
             if (action.gridType == "Square" && action.movement == "Stand") { break; } // TODO other grids
 
             newPositions[npc.id] = move(dpi, newPositions[npc.id], action);
-            expendedMovement += 5 // TODO hardcoded value for grid scale
+            expendedMovement += stepSize
         }
     }
     OBR.scene.items.updateItems(npcs, (nn) => {
@@ -45,7 +46,10 @@ type SquareAction = {
 }
 
 // Beeline strategy, TODO with left turns when running into something.
-async function meleeBasicMove(pos : Vector2, targetPos : Vector2) : Promise<Action> {
+async function meleeBasicMove(pos : Vector2, targetPos : Vector2
+        , newPositions : Record<string, Vector2> ) : Promise<Action>
+{
+    // TODO use newPositions for collision
     // TODO gridtype always square
     const tpos = await OBR.scene.grid.snapPosition(targetPos, 1, false, true);
 
