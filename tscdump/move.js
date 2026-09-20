@@ -1,4 +1,5 @@
 import OBR from "@owlbear-rodeo/sdk";
+import * as state from "./state";
 import * as util from "./util";
 export async function moveAll() {
     const items = await OBR.scene.items.getItems();
@@ -17,7 +18,9 @@ export async function moveAll() {
         }
         let expendedMovement = 0;
         while (!(expendedMovement + stepSize > npc.meta.speed)) {
-            const action = await meleeBasicMove(newPositions[npc.id], target.position, newPositions);
+            const action = (npc.meta.kind == state.MELEE)
+                ? await meleeBasicMove(newPositions[npc.id], target.position, newPositions)
+                : await rangedBasicMove(newPositions[npc.id], target.position, npc.meta.range, newPositions);
             if (action.gridType == "Square" && action.movement == "Stand") {
                 break;
             } // TODO other grids
@@ -35,10 +38,10 @@ export async function moveAll() {
         }
     });
 }
+// TODO make these uniform, and have them handle more of the movement responsibility
 // Beeline strategy, TODO with left turns when running into something.
 async function meleeBasicMove(pos, targetPos, newPositions) {
     // TODO use newPositions for collision
-    // TODO gridtype always square
     const tpos = await OBR.scene.grid.snapPosition(targetPos, 1, false, true);
     const dpi = await OBR.scene.grid.getDpi();
     if (util.distance(pos, tpos) < 2 * dpi) {
@@ -48,6 +51,17 @@ async function meleeBasicMove(pos, targetPos, newPositions) {
     // TODO handle collision
     const angle = Math.atan2(tpos.y - pos.y, tpos.x - pos.x);
     return angleToAction(angle, "Square");
+}
+// TODO other grid types
+// TODO other step sizes
+async function rangedBasicMove(pos, targetPos, range, newPositions) {
+    const stepSize = 5;
+    const tpos = await OBR.scene.grid.snapPosition(targetPos, 1, false, true);
+    const dpi = await OBR.scene.grid.getDpi();
+    if (util.distance(pos, tpos) < (1 + (range / stepSize)) * dpi) {
+        return { gridType: "Square", movement: "Stand" };
+    }
+    return meleeBasicMove(pos, targetPos, newPositions);
 }
 // TODO handle collision
 function move(speed, pos, action) {

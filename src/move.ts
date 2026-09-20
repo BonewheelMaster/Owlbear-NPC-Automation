@@ -22,7 +22,12 @@ export async function moveAll() {
 
         let expendedMovement = 0;
         while (!(expendedMovement + stepSize > npc.meta.speed)) {
-            const action = await meleeBasicMove(newPositions[npc.id], target.position, newPositions);
+            const action = (npc.meta.kind == state.MELEE)
+                    ? await meleeBasicMove(newPositions[npc.id], target.position
+                        , newPositions)
+                    : await rangedBasicMove(newPositions[npc.id], target.position
+                        , npc.meta.range, newPositions);
+
             if (action.gridType == "Square" && action.movement == "Stand") { break; } // TODO other grids
 
             newPositions[npc.id] = move(dpi, newPositions[npc.id], action);
@@ -45,12 +50,13 @@ type SquareAction = {
     movement : "Stand" | "N" | "NW" | "W" | "SW" | "S" | "SE" | "E" | "NE";
 }
 
+// TODO make these uniform, and have them handle more of the movement responsibility
+
 // Beeline strategy, TODO with left turns when running into something.
 async function meleeBasicMove(pos : Vector2, targetPos : Vector2
         , newPositions : Record<string, Vector2> ) : Promise<Action>
 {
     // TODO use newPositions for collision
-    // TODO gridtype always square
     const tpos = await OBR.scene.grid.snapPosition(targetPos, 1, false, true);
 
     const dpi = await OBR.scene.grid.getDpi();
@@ -63,6 +69,22 @@ async function meleeBasicMove(pos : Vector2, targetPos : Vector2
     const angle = Math.atan2( tpos.y - pos.y
                             , tpos.x - pos.x);
     return angleToAction(angle, "Square");
+}
+
+// TODO other grid types
+// TODO other step sizes
+async function rangedBasicMove(pos : Vector2, targetPos : Vector2, range : number
+    , newPositions : Record<string, Vector2> ) : Promise<Action>
+{
+    const stepSize = 5;
+
+    const tpos = await OBR.scene.grid.snapPosition(targetPos, 1, false, true);
+
+    const dpi = await OBR.scene.grid.getDpi();
+    if (util.distance(pos, tpos) < (1+(range / stepSize))*dpi) {
+        return { gridType : "Square", movement: "Stand" };
+    }
+    return meleeBasicMove(pos, targetPos, newPositions);
 }
 
 // TODO handle collision
