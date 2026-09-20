@@ -10,17 +10,17 @@ import{c as e,f as t,i as n,n as r,o as i,s as a}from"./util-DFvZsEHX.js";import
         <div id="typeSpecificSettings"></div>
     `;let c=document.querySelector(`#npcTypeDropDown`);if(c!==null)switch(c.addEventListener(`change`,()=>{s(c.value,t)}),r){case`None`:return;case i:if(n==`Disagreed`)break;var l=document.querySelector(`#typeSpecificSettings`);if(l===null)break;l.innerHTML=`
                 <label for="speedInput">Speed:</label>
-                <input type="number" id="speedInput"/>
+                <input type="number" id="speedInput" size="3"/>
 
                 <label for="targetInput">Target ID:</label>
                 <input type="text" id="targetInput"/>
             `;var u=document.querySelector(`#speedInput`);if(u===null)break;n[0]==`Agreed`&&(u.value=n[1].speed.toString()),u.addEventListener(`input`,()=>{o(e=>{let t=parseInt(u.value);return e.kind==`MELEE`&&!isNaN(t)?{...e,speed:t}:e},t)});var p=document.querySelector(`#targetInput`);if(p===null)break;n[0]==`Agreed`&&(p.value=n[1].target.toString()),p.addEventListener(`input`,()=>{o(e=>e.kind==`MELEE`?{...e,target:p.value}:e,t)});break;case e:if(n==`Disagreed`)break;var l=document.querySelector(`#typeSpecificSettings`);if(l===null)break;l.innerHTML=`
                 <label for="speedInput">Speed:</label>
-                <input type="number" id="speedInput"/>
+                <input type="number" id="speedInput" size="3"/>
 
                 <label for="targetInput">Target ID:</label>
                 <input type="text" id="targetInput"/>
 
                 <label for="rangeInput">Range:</label>
-                <input type="number" id="rangeInput"/>
+                <input type="number" id="rangeInput" size="4/>
             `;var u=document.querySelector(`#speedInput`);if(u===null)break;n[0]==`Agreed`&&(u.value=n[1].speed.toString()),u.addEventListener(`input`,()=>{o(e=>{let t=parseInt(u.value);return e.kind==`RANGED`&&!isNaN(t)?{...e,speed:t}:e},t)});var p=document.querySelector(`#targetInput`);if(p===null)break;n[0]==`Agreed`&&(p.value=n[1].target.toString()),p.addEventListener(`input`,()=>{o(e=>e.kind==`RANGED`?{...e,target:p.value}:e,t)});var m=document.querySelector(`#rangeInput`);if(m===null)break;n[0]==`Agreed`&&n[1].kind==`RANGED`&&(m.value=n[1].range.toString()),m.addEventListener(`input`,()=>{o(e=>{let t=parseInt(m.value);return e.kind==`RANGED`&&!isNaN(t)?{...e,range:t}:e},t)})}});

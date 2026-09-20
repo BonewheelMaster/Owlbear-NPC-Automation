@@ -94,7 +94,7 @@ const menu = async () => {
             }
             typeSpecificSettings.innerHTML = `
                 <label for="speedInput">Speed:</label>
-                <input type="number" id="speedInput"/>
+                <input type="number" id="speedInput" size="3"/>
 
                 <label for="targetInput">Target ID:</label>
                 <input type="text" id="targetInput"/>
@@ -145,13 +145,13 @@ const menu = async () => {
             }
             typeSpecificSettings.innerHTML = `
                 <label for="speedInput">Speed:</label>
-                <input type="number" id="speedInput"/>
+                <input type="number" id="speedInput" size="3"/>
 
                 <label for="targetInput">Target ID:</label>
                 <input type="text" id="targetInput"/>
 
                 <label for="rangeInput">Range:</label>
-                <input type="number" id="rangeInput"/>
+                <input type="number" id="rangeInput" size="4/>
             `;
             var speedInput = document.querySelector("#speedInput");
             if (speedInput === null) {
