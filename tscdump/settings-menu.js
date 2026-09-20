@@ -151,7 +151,7 @@ const menu = async () => {
                 <input type="text" id="targetInput"/>
 
                 <label for="rangeInput">Range:</label>
-                <input type="number" id="rangeInput" size="4/>
+                <input type="number" id="rangeInput" size="4"/>
             `;
             var speedInput = document.querySelector("#speedInput");
             if (speedInput === null) {

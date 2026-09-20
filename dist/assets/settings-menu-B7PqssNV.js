@@ -22,5 +22,5 @@ import{c as e,f as t,i as n,n as r,o as i,s as a}from"./util-DFvZsEHX.js";import
                 <input type="text" id="targetInput"/>
 
                 <label for="rangeInput">Range:</label>
-                <input type="number" id="rangeInput" size="4/>
+                <input type="number" id="rangeInput" size="4"/>
             `;var u=document.querySelector(`#speedInput`);if(u===null)break;n[0]==`Agreed`&&(u.value=n[1].speed.toString()),u.addEventListener(`input`,()=>{o(e=>{let t=parseInt(u.value);return e.kind==`RANGED`&&!isNaN(t)?{...e,speed:t}:e},t)});var p=document.querySelector(`#targetInput`);if(p===null)break;n[0]==`Agreed`&&(p.value=n[1].target.toString()),p.addEventListener(`input`,()=>{o(e=>e.kind==`RANGED`?{...e,target:p.value}:e,t)});var m=document.querySelector(`#rangeInput`);if(m===null)break;n[0]==`Agreed`&&n[1].kind==`RANGED`&&(m.value=n[1].range.toString()),m.addEventListener(`input`,()=>{o(e=>{let t=parseInt(m.value);return e.kind==`RANGED`&&!isNaN(t)?{...e,range:t}:e},t)})}});
