@@ -99,11 +99,15 @@ const menu = async () => {
             if (typeSpecificSettings === null) { break; }
 
             typeSpecificSettings.innerHTML = `
-                <label for="speedInput">Speed:</label>
-                <input type="number" id="speedInput" size="3"/>
+                <div>
+                    <label for="speedInput">Speed:</label>
+                    <input type="number" id="speedInput" size="3"/>
+                </div>
 
-                <label for="targetInput">Target ID:</label>
-                <input type="text" id="targetInput"/>
+                <div>
+                    <label for="targetInput">Target ID:</label>
+                    <input type="text" id="targetInput"/>
+                </div>
             `;
             var speedInput = document.querySelector("#speedInput") as HTMLInputElement;
             if (speedInput === null) { break; }
@@ -137,14 +141,20 @@ const menu = async () => {
             if (typeSpecificSettings === null) { break; }
 
             typeSpecificSettings.innerHTML = `
-                <label for="speedInput">Speed:</label>
-                <input type="number" id="speedInput" size="3"/>
+                <div>
+                    <label for="speedInput">Speed:</label>
+                    <input type="number" id="speedInput" size="3"/>
+                </div>
 
-                <label for="targetInput">Target ID:</label>
-                <input type="text" id="targetInput"/>
+                <div>
+                    <label for="targetInput">Target ID:</label>
+                    <input type="text" id="targetInput"/>
+                </div>
 
-                <label for="rangeInput">Range:</label>
-                <input type="number" id="rangeInput" size="4"/>
+                <div>
+                    <label for="rangeInput">Range:</label>
+                    <input type="number" id="rangeInput" size="4"/>
+                </div>
             `;
             var speedInput = document.querySelector("#speedInput") as HTMLInputElement;
             if (speedInput === null) { break; }
