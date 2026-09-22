@@ -4,8 +4,7 @@ import * as state from "./state";
 import * as util  from "./util";
 
 export function showId(items : Item[]) {
-    if (items.length != 1) { return; }
-    OBR.notification.show(items[0].id, "INFO");
+    items.map((item) => OBR.notification.show(item.id, "INFO"));
 }
 
 export function addTokens(items : Item[]) {
