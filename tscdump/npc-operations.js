@@ -2,7 +2,7 @@ import OBR from "@owlbear-rodeo/sdk";
 import * as state from "./state";
 import * as util from "./util";
 export function showId(items) {
-    items.map((item) => OBR.notification.show(item.id, "INFO"));
+    items.map((item) => { OBR.notification.show(item.id, "INFO"); });
 }
 export function addTokens(items) {
     updateTokens(state.initMeleeAI, items);
