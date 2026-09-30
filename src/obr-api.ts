@@ -21,8 +21,10 @@ export async function snapToGrid(pos : Vector2) : Promise<Vector2>
 export async function showId(items : Item[]) : Promise<void>
 export async function enableNPCs(items : Item[]) : Promise<void>
 export async function disableNPCs(items : Item[]) : Promise<void>
-export async function updateNPCs(f : (npcai : NPCAI) => NPCAI, npcs : NPC[]) : Promise<void>
-export async function updateItems(f : (item : Item) => Item, items : Item[]) : Promise<void>
+export async function updateNPCs(f : (npcai : NPCAI) => NPCAI, npcs : NPC[])
+    : Promise<void>
+export async function updateItems(f : (item : Item) => Item, items : Item[])
+    : Promise<void>
 export async function createContextMenus(menus : ContextMenuItem[]) : Promise<void>
 export async function showNotification(msg : string) : Promise<void>
 export async function onReady(f : () => void) : Promise<void>
