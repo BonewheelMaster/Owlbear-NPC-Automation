@@ -1,8 +1,9 @@
 import { Item } from "@owlbear-rodeo/sdk";
+import * as OBR from "./obr-api";
 
 import * as pre from "./prelude";
 
-import { NPC } from "./npc";
+import { NPC, NPCAIType } from "./npc";
 import * as npc from "./npc";
 
 export function filterNPCs(items : Item[]) : NPC[] {
@@ -17,7 +18,7 @@ export function getName(item : Item) {
 // Get the label of an item. If it has none, return null.
 export function getLabel(item : Item) : string | null {
     if ( "text" in item && typeof item.text == "object" && item.text !== null
-        && "plainText" in item.text && typeof item.text.plainText == "string"
+         && "plainText" in item.text && typeof item.text.plainText == "string"
        ) { return item.text.plainText; }
 
     return null;
@@ -27,4 +28,13 @@ export function getTarget(items : Item[], targetId : string) : Item | null {
     const target = items.find((item) => { return item.id == targetId; })
     if (target === undefined) { return null; }
     return target;
+}
+export async function changeNPCTypes(newType : NPCAIType, npcs : NPC[]) : Promise<void> {
+    OBR.updateNPCs((n) => {
+        if (n.kind == newType) { return n; }
+        switch (newType) {
+            case npc.MELEE:  return npc.initMeleeAI;
+            case npc.RANGED: return npc.initRangedAI;
+        }
+    }, npcs);
 }
