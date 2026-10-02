@@ -17,9 +17,8 @@ export async function getItems() : Promise<Item[]> {
     return OBR.scene.items.getItems();
 }
 export async function getSelection() : Promise<Item[]> {
-    const selection = await OBR.player.getSelection();
+    const [selection, items] = await Promise.all([OBR.player.getSelection(), getItems()]);
     if (selection === undefined) { return []; }
-    const items = await getItems();
 
     let sel = [];
     for (const id in selection) {
