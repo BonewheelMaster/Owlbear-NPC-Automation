@@ -1,5 +1,5 @@
 import * as OBR from "./obr-api";
-import { Vector2, Item } from "@owlbear-rodeo/sdk";
+import { Vector2, Item, GridType } from "@owlbear-rodeo/sdk";
 
 import * as pre from "./prelude";
 
@@ -14,26 +14,24 @@ async function move(items : Item[], npc : NPC, grid : OBR.Grid) : Promise<void>
 type Action = SquareAction | HexVertAction | HexHorizAction
     | DimetricAction | IsometricAction
 
-type GridType = "Square" | "HexVert" | "HexHoriz" | "Dimetric" | "Isometric"
-
 type SquareAction = {
-    gridType : "Square";
+    gridType : "SQUARE";
     movement : "Stand" | "N" | "NW" | "W" | "SW" | "S" | "SE" | "E" | "NE";
 }
 type HexVertAction = {
-    gridType : "HexVert";
+    gridType : "HEX_VERTICAL";
     movement : "Stand" | "U" | "UL" | "DL" | "D" | "DR" | "UR";
 }
 type HexHorizAction = {
-    gridType : "HexHoriz";
+    gridType : "HEX_HORIZONTAL";
     movement : "Stand" | "L" | "DL" | "DR" | "R" | "UR" | "UL";
 }
 type DimetricAction = {
-    gridType : "Dimetric";
+    gridType : "DIMETRIC";
     movement : "Stand" | "N" | "NW" | "W" | "SW" | "S" | "SE" | "E" | "NE";
 }
 type IsometricAction = {
-    gridType : "Isometric";
+    gridType : "ISOMETRIC";
     movement : "Stand" | "N" | "NW" | "W" | "SW" | "S" | "SE" | "E" | "NE";
 }
 
