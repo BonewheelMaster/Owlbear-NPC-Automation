@@ -52,8 +52,8 @@ export async function updateNPCs(f : (npcAI : NPCAI) => NPCAI, npcs : NPC[])
     updateItems((item) => {
                     if (!npc.isNPC(item)) { return item; }
                     item.meta = f(item.meta);
-                    return item; }
-                , npcs);
+                    return item;
+                }, npcs);
 }
 export async function updateItems(f : (item : Item) => Item, items : Item[])
     : Promise<void>
@@ -63,6 +63,9 @@ export async function updateItems(f : (item : Item) => Item, items : Item[])
             item = f(item);
         }
     });
+}
+export async function setItems(oldItems : Item[], newItems : Item[]) : Promise<void> {
+    OBR.scene.items.updateItems(oldItems, () => newItems);
 }
 export async function createContextMenus(menus : ContextMenuItem[]) : Promise<void> {
     await Promise.all(menus.map((menu) => { OBR.contextMenu.create(menu); }));
