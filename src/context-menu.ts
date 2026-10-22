@@ -24,7 +24,7 @@ export const NPCEnabledFilter  : ContextMenuIconFilter = {
 export const menuShowId   : ContextMenuItem = {
     id: pre.ID + "/menuShowId",
     icons: [{
-        icon: "../panel.svg",
+        icon: "./panel.svg",
         label: "Show ID",
         }],
     onClick: contextMap(OBR.showId)
@@ -32,7 +32,7 @@ export const menuShowId   : ContextMenuItem = {
 export const menuAdd      : ContextMenuItem = {
     id: pre.ID + "/menuAdd",
     icons: [{
-        icon: "../panel.svg",
+        icon: "./panel.svg",
         label: "Enable NPC",
         filter: NPCDisabledFilter
         }],
@@ -41,16 +41,16 @@ export const menuAdd      : ContextMenuItem = {
 export const menuSettings : ContextMenuItem = {
     id: pre.ID + "/menuSettings",
     icons: [{
-        icon: "../panel.svg",
+        icon: "./panel.svg",
         label: "NPC Settings",
         filter: NPCEnabledFilter
     }],
-    embed: { url: "../src/settings-menu.html" } // TODO can these be relative?
+    embed: { url: "./src/settings-menu.html" } // TODO can these be relative?
 };
 export const menuInfo     : ContextMenuItem = {
     id: pre.ID + "/menuInfo",
     icons: [{
-        icon: "../panel.svg", // TODO can these be relative?
+        icon: "./panel.svg", // TODO can these be relative?
         label: "Info -> Console"
         }],
     onClick: (context) => { console.log(context.items); }
