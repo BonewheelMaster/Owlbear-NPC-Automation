@@ -9,6 +9,7 @@ import * as util from "./util";
 
 async function getSelectedNPCs() : Promise<NPC[]> {
     const selection = await OBR.getSelection();
+    console.log(util.filterNPCs(selection));
     return util.filterNPCs(selection);
 }
 async function removeSelectedNPCs()  : Promise<void> {
