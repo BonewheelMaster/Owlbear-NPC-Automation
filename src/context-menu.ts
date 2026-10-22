@@ -6,7 +6,7 @@ import * as pre from "./prelude";
 
 import * as npc from "./npc";
 
-const panelIconURL = "Owlbear-NPC-Automation/panel.svg";
+const panelIconURL = "/Owlbear-NPC-Automation/panel.svg";
 
 export const NPCDisabledFilter : ContextMenuIconFilter = {
     roles: ["GM"],
