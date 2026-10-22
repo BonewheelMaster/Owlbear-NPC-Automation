@@ -26,7 +26,7 @@ async function removeSelectedNPCs()  : Promise<void> {
 function getNPCSettings(NPCs : NPC[])
     : ["Agreed", NPCAI] | ["Partial", NPCAIType] | "Disagreed"
 {
-    if (NPCs.length < 1) {
+    if (NPCs.length >= 1) {
         const refNPCAI = NPCs[0].meta;
 
         if (NPCs.every((n) => { return npc.NPCAIEqual(n.meta, refNPCAI); })) {
