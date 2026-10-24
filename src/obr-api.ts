@@ -41,7 +41,7 @@ export async function showId(items : Item[]) : Promise<void> {
     items.map((i) => showNotification(i.id));
 }
 export async function enableNPCs(items : Item[]) : Promise<void> {
-    updateItems((i) => { i.metadata[pre.ID] = npc.initMeleeAI; return i; }, items);
+    updateItems((i) => { return { ...i, meta: npc.initMeleeAI }; }, items);
 }
 export async function disableNPCs(items : Item[]) : Promise<void> {
     updateItems((i) => { i.metadata[pre.ID] = {}; return i; }, items);
