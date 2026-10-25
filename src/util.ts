@@ -7,7 +7,12 @@ import { NPC, NPCAIType } from "./npc";
 import * as npc from "./npc";
 
 export function filterNPCs(items : Item[]) : NPC[] {
-    return items.filter(npc.isNPC);
+    let npcs = [];
+    for (const item of items) {
+        if (! npc.validMetadata(item.metadata[pre.ID])) { continue; }
+        npcs.push({ ...item, meta: item.metadata[pre.ID] });
+    }
+    return npcs;
 }
 // Get the name of an item, which is its text label if it has one.
 export function getName(item : Item) {
