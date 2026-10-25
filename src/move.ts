@@ -179,7 +179,7 @@ function breadthFirst(items : Item[], grid : OBR.Grid, pos : Vector2, target : V
 
         for (const f of frontier) {
             // This application of tracePath should never return null.
-            if (f == target) { return tracePath(from, target, pos, grid.type); }
+            if (distance(f, target) <= grid.dpi / 2) { return tracePath(from, target, pos, grid.type); }
 
             const nn = neighbors(grid.type, f);
             newFrontier = newFrontier.concat(
