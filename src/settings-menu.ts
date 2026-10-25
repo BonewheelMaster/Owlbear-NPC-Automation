@@ -105,8 +105,8 @@ function makeInputs(form : HTMLElement, kind : NPCAIType, values : NPCAI | null
                        , selNPCs);
     });
     if (values !== null) { speedInput.value = values.speed.toString(); }
-    speedDiv.append(speedInput);
     speedDiv.append(speedLabel);
+    speedDiv.append(speedInput);
     form.append(speedDiv);
 
     let targetDiv   = document.createElement("div");
@@ -121,8 +121,8 @@ function makeInputs(form : HTMLElement, kind : NPCAIType, values : NPCAI | null
                        , selNPCs);
     });
     if (values !== null) { targetInput.value = values.target; }
-    targetDiv.append(targetInput);
     targetDiv.append(targetLabel);
+    targetDiv.append(targetInput);
     form.append(targetDiv);
 
     if (kind == npc.RANGED && values !== null && values.kind == npc.RANGED) {
@@ -143,8 +143,8 @@ function makeInputs(form : HTMLElement, kind : NPCAIType, values : NPCAI | null
                            , selNPCs);
         });
         rangeInput.value = values.range.toString();
-        rangeDiv.append(rangeInput);
         rangeDiv.append(rangeLabel);
+        rangeDiv.append(rangeInput);
         form.append(rangeDiv);
     }
 }
