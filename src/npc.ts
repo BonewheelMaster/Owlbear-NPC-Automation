@@ -46,9 +46,6 @@ export function NPCAIEqual(npc1 : NPCAI, npc2 : NPCAI) : boolean {
     }
     return false;
 }
-export function isNPC(item : Item) : item is NPC {
-    return pre.ID in item.metadata && validMetadata(item.metadata[pre.ID]);
-}
 export function validMetadata(meta : any) : meta is NPCAI {
     if (typeof meta == "object" && "kind" in meta) {
         switch (meta.kind) {

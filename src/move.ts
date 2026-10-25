@@ -12,8 +12,8 @@ export async function moveAll() : Promise<void> {
 
     let newItems = await snapAllNPCs(items);
     for (let item of newItems) {
-        if (! npc.isNPC(item)) { continue; }
-        item.position = move(newItems, item, grid);
+        if (! npc.validMetadata(item.metadata[pre.ID])) { continue; }
+        item.position = move(newItems, { ...item, meta: item.metadata[pre.ID] }, grid);
     }
     OBR.setItems(items, newItems);
 }
@@ -47,7 +47,7 @@ function move(items : Item[], n : NPC, grid : OBR.Grid) : Vector2 {
 }
 async function snapAllNPCs(items : Item[]) : Promise<Item[]> {
     return Promise.all(items.map((item) => {
-        if (! npc.isNPC(item)) { return item; }
+        if (! npc.validMetadata(item.metadata[pre.ID])) { return item; }
         return OBR.snapToGrid(item.position)
             .then((newPos) => { return { ...item, position: newPos }; });
     }));
@@ -153,7 +153,7 @@ const rangedBasic : Strategy<npc.RangedAI> = (items, pos, nai, grid) => {
         minActions.push(action);
     }
     //let minActions = actions.reduce(
-    //    ([pacc, acc], action) => { 
+    //    ([pacc, acc], action) => {
     //        if (distance(pacc, target.position) <= nai.range) { return [pacc, acc]; }
     //        // TODO hardcoded step size
     //        return [push(5, pacc, action), acc.concat([action])];
