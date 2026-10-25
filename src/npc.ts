@@ -63,7 +63,7 @@ export function validMetadata(meta : any) : meta is NPCAI {
                     && "target" in meta
                     && typeof meta.target == "string"
                     && "range" in meta
-                    && typeof meta.range == "string";
+                    && typeof meta.range == "number";
             default: return false;
         }
     }
