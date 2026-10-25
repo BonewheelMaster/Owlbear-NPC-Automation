@@ -72,9 +72,11 @@ function makeDropDown(form : HTMLElement, selected : NPCAIType | null
     let blank      = document.createElement("option");
     blank.disabled = true;
     blank.selected = selected === null;
+    dropDown.append(blank);
 
     for (const choice of [npc.MELEE, npc.RANGED]) {
         let option      = document.createElement("option");
+        option.text     = choice
         option.value    = choice;
         option.selected = selected == choice;
         dropDown.append(option);
