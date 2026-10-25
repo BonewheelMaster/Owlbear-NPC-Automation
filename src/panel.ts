@@ -50,9 +50,7 @@ function makePanel(items : Item[]) : void {
     panel.append(npcList);
 }
 async function main() : Promise<void> {
-    const items = await OBR.getItems();
-
     makeMoveAllButton();
-    makePanel(items);
+    OBR.onChange(makePanel);
 }
 OBR.onReady(main);
