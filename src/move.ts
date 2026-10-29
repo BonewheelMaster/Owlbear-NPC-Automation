@@ -57,7 +57,7 @@ async function snapAllNPCs(items : Item[]) : Promise<Item[]> {
 //
 // A position is occupied if there is an item within half dpi of it.
 function occupied(items : Item[], pos : Vector2, dpi : number) : boolean {
-    return items.every((i) => distance(i.position, pos) <= dpi / 2);
+    return items.some((i) => distance(i.position, pos) <= dpi / 2);
 }
 
 function distance(pos1 : Vector2, pos2 : Vector2) : number {
@@ -178,14 +178,13 @@ function breadthFirst(items : Item[], grid : OBR.Grid, pos : Vector2, target : V
         let newFrontier : Vector2[] = [];
 
         for (const f of frontier) {
-            // This application of tracePath should never return null.
-            if (distance(f, target) <= grid.dpi / 2) { return tracePath(from, target, pos, grid.type); }
-
-            const nn = neighbors(grid.type, f);
+            const nn = neighbors(grid, f);
             newFrontier = newFrontier.concat(
                     nn.filter((n) => ! from.has(n) && ! occupied(items, n, grid.dpi))
             );
             nn.forEach((n) => { from.set(n,f); });
+
+            if (distance(f, target) <= grid.dpi / 2) { return tracePath(from, f, pos, grid.type); }
         }
         frontier = newFrontier;
     }
@@ -203,7 +202,6 @@ function tracePath(from : Map<Vector2, Vector2>, target : Vector2, pos : Vector2
         const prevPos = from.get(currentPos);
 
         if (prevPos !== undefined) {
-            // TODO make sure I didn't reverse this up.
             const angle = Math.atan2(prevPos.y - currentPos.y, prevPos.x - currentPos.x);
             path.push(angleToAction(angle, gridType));
             currentPos = prevPos;
@@ -213,9 +211,9 @@ function tracePath(from : Map<Vector2, Vector2>, target : Vector2, pos : Vector2
     path.reverse();
     return path;
 }
-function neighbors(gridType : GridType, pos : Vector2) : Vector2[] {
+function neighbors(grid : OBR.Grid, pos : Vector2) : Vector2[] {
     let relPos : Vector2[] = [];
-    switch (gridType) {
+    switch (grid.type) {
         case "SQUARE":
             relPos = [
                 { x:  1, y:  0 },
@@ -229,5 +227,5 @@ function neighbors(gridType : GridType, pos : Vector2) : Vector2[] {
             ]; break
         //TODO
     }
-    return relPos.map((r) => { return {x: r.x + pos.x, y: r.y + pos.y }; });
+    return relPos.map((r) => { return {x: r.x * grid.dpi + pos.x, y: r.y * grid.dpi + pos.y }; });
 }
