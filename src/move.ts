@@ -184,7 +184,6 @@ function breadthFirst(items : Item[], grid : OBR.Grid, pos : Vector2, target : V
                                                  && ! occupied(items, n, grid.dpi));
             newFrontier = newFrontier.concat(nn);
             nn.forEach((n) => { from.set(n,f); });
-            ff.push(f);
         }
         frontier = newFrontier;
         currentDepth++;
