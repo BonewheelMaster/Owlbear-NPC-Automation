@@ -140,7 +140,8 @@ const rangedBasic : Strategy<npc.RangedAI> = (items, pos, nai, grid) => {
     const target = util.getTarget(items, nai.target);
     if (target === null) { return [{ gridType : grid.type, movement : "Stand" }]; }
 
-    const actions = breadthFirst(items, grid, pos, target.position);
+    //                                                 TODO hardcoded step size V
+    const actions = breadthFirst(items, grid, pos, target.position, nai.speed / 5);
     // We only wish to get within range.
     let minActions = [];
     let currentPos = pos;
@@ -152,12 +153,6 @@ const rangedBasic : Strategy<npc.RangedAI> = (items, pos, nai, grid) => {
         currentPos = push(5, currentPos, action);
         minActions.push(action);
     }
-    //let minActions = actions.reduce(
-    //    ([pacc, acc], action) => {
-    //        if (distance(pacc, target.position) <= nai.range) { return [pacc, acc]; }
-    //        // TODO hardcoded step size
-    //        return [push(5, pacc, action), acc.concat([action])];
-    //    }, [pos, []])[1]
     return minActions;
 };
 
@@ -167,14 +162,15 @@ const rangedBasic : Strategy<npc.RangedAI> = (items, pos, nai, grid) => {
 // Does not consider difficult terrain, and assumes that moving diagonally on squares
 // is the same as other directions.
 // If there is no valid path, will return a single stand action.
-function breadthFirst(items : Item[], grid : OBR.Grid, pos : Vector2, target : Vector2
-    ) : Action[]
+function breadthFirst(items : Item[], grid : OBR.Grid, pos : Vector2, target : Vector2,
+    maxSteps : number) : Action[]
 {
     let frontier : Vector2[]             = [pos];
     let from     : Map<Vector2, Vector2> = new Map();
     from.set(pos, pos);
+    let totalSteps = 0
 
-    while (frontier.length != 0) {
+    while (frontier.length != 0 && totalSteps < maxSteps) {
         let newFrontier : Vector2[] = [];
 
         for (const f of frontier) {
@@ -187,6 +183,7 @@ function breadthFirst(items : Item[], grid : OBR.Grid, pos : Vector2, target : V
             if (distance(f, target) <= grid.dpi / 2) { return tracePath(from, f, pos, grid.type); }
         }
         frontier = newFrontier;
+        totalSteps++;
     }
     return [{ gridType : grid.type, movement : "Stand" }];
 }
