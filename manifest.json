@@ -3,14 +3,14 @@
     "version": "0.1.0",
     "manifest_version": 1,
     "description": "Automate the movement of simple NPCs.",
-    "icon": "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/icon.png",
+    "icon": "https://bonewheelmaster.duckdns.org/icon.png",
     "author": "bonewheelmaster",
-    "background_url": "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/src/background.html",
+    "background_url": "https://bonewheelmaster.duckdns.org/src/background.html",
     "homepage_url": "https://github.com/bonewheelmaster/Owlbear-NPC-Automation",
     "action": {
         "title": "NPC Control Panel",
-        "icon": "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/panel.svg",
-        "popover": "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/src/panel.html",
+        "icon": "https://bonewheelmaster.duckdns.org/panel.svg",
+        "popover": "https://bonewheelmaster.duckdns.org/src/panel.html",
         "width": 250,
         "height": 450
     }
