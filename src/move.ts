@@ -156,6 +156,10 @@ const rangedBasic : Strategy<npc.RangedAI> = (items, pos, nai, grid) => {
     return minActions;
 };
 
+function reached(from : Map<Vector2, Vector2>, pos : Vector2) : boolean {
+    return from.keys().some(p => p.x == pos.x && p.y == pos.y);
+}
+
 // Return the shortest path using a simple breadth-first search.
 //
 // The type of action given will match the type of grid.
@@ -163,27 +167,27 @@ const rangedBasic : Strategy<npc.RangedAI> = (items, pos, nai, grid) => {
 // is the same as other directions.
 // If there is no valid path, will return a single stand action.
 function breadthFirst(items : Item[], grid : OBR.Grid, pos : Vector2, target : Vector2,
-    maxSteps : number) : Action[]
+    maxDepth : number) : Action[]
 {
     let frontier : Vector2[]             = [pos];
     let from     : Map<Vector2, Vector2> = new Map();
     from.set(pos, pos);
-    let totalSteps = 0
+    let currentDepth = 0
 
-    while (frontier.length != 0 && totalSteps < maxSteps) {
+    while (frontier.length != 0 && currentDepth <= maxDepth) {
         let newFrontier : Vector2[] = [];
 
         for (const f of frontier) {
-            const nn = neighbors(grid, f);
-            newFrontier = newFrontier.concat(
-                    nn.filter((n) => ! from.has(n) && ! occupied(items, n, grid.dpi))
-            );
-            nn.forEach((n) => { from.set(n,f); });
-
             if (distance(f, target) <= grid.dpi / 2) { return tracePath(from, f, pos, grid.type); }
+
+            const nn = neighbors(grid, f).filter((n) => ! reached(from, n)
+                                                 && ! occupied(items, n, grid.dpi));
+            newFrontier = newFrontier.concat(nn);
+            nn.forEach((n) => { from.set(n,f); });
+            ff.push(f);
         }
         frontier = newFrontier;
-        totalSteps++;
+        currentDepth++;
     }
     return [{ gridType : grid.type, movement : "Stand" }];
 }
