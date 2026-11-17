@@ -21,11 +21,11 @@ export async function getSelection() : Promise<Item[]> {
     if (selection === undefined) { return []; }
 
     let sel = [];
-    for (const id in selection) {
+    for (const id of selection) {
         const item = items.find((i) => i.id == id);
-        if (item !== undefined) { items.push(item); }
+        if (item !== undefined) { sel.push(item); }
     }
-    return items;
+    return sel;
 }
 export async function getGrid() : Promise<Grid> {
     const [dpi, scale, type] = await Promise.all([
@@ -65,13 +65,23 @@ export async function updateItems(f : (item : Item) => Item, items : Item[])
     });
 }
 export async function setItems(oldItems : Item[], newItems : Item[]) : Promise<void> {
-    OBR.scene.items.updateItems(oldItems, () => newItems);
+    OBR.scene.items.updateItems(oldItems, (items) => {
+        for (let item of items) {
+            const newItem = newItems.find((i) => i.id == item.id);
+            if (newItem !== undefined) {
+                item.position = newItem.position;
+            }
+        }
+    });
 }
 export async function createContextMenus(menus : ContextMenuItem[]) : Promise<void> {
     await Promise.all(menus.map((menu) => { OBR.contextMenu.create(menu); }));
 }
 export async function showNotification(msg : string) : Promise<void> {
     OBR.notification.show(msg, "INFO");
+}
+export async function selectItem(item : Item) : Promise<void> {
+    OBR.player.select([item.id], false);
 }
 export async function onReady(f : () => void) : Promise<void> {
     OBR.onReady(f);
