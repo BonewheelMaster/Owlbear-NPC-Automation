@@ -17,7 +17,7 @@ export function filterNPCs(items : Item[]) : NPC[] {
 // Get the name of an item, which is its text label if it has one.
 export function getName(item : Item) {
     const label = getLabel(item);
-    if (label === null) { return item.name; }
+    if (label === null || label == "") { return item.name; }
     return label;
 }
 // Get the label of an item. If it has none, return null.
