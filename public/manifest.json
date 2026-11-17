@@ -11,7 +11,7 @@
         "title": "NPC Control Panel",
         "icon": "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/panel.svg",
         "popover": "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/src/panel.html",
-        "width": 250,
-        "height": 450
+        "width": 300,
+        "height": 500
     }
 }
