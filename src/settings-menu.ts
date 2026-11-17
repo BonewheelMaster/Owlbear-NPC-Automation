@@ -11,7 +11,7 @@ async function getSelectedNPCs() : Promise<NPC[]> {
     const selection = await OBR.getSelection();
     return util.filterNPCs(selection);
 }
-async function removeSelectedNPCs()  : Promise<void> {
+async function removeSelectedNPCs() : Promise<void> {
     const selNPCs = await getSelectedNPCs();
     OBR.disableNPCs(selNPCs);
 }
