@@ -153,12 +153,12 @@ type Strategy<ai> = (items : Item[], pos : Vector2, npcAI : ai, grid : OBR.Grid)
 const meleeBasic : Strategy<npc.MeleeAI> = (items, pos, nai, grid) => {
     return rangedBasic(items, pos, { ...nai, kind: npc.RANGED, range: 5 }, grid); // TODO hardcoded step size
 };
-// Looks for the path for a max of 1 second. This is so we don't look for the target forever.
+// Looks for the path for a max half a second. This is so we don't look for the target forever.
 const rangedBasic : Strategy<npc.RangedAI> = (items, pos, nai, grid) => {
     const target = util.getTarget(items, nai.target);
     if (target === null) { return [{ gridType : grid.type, movement : "Stand" }]; }
 
-    const actions = aStar(items, grid, pos, target.position, 1);
+    const actions = aStar(items, grid, pos, target.position, 0.5);
     // We only wish to get within range.
     let minActions = [];
     let currentPos = pos;
