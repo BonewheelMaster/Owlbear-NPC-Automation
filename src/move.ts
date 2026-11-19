@@ -63,6 +63,19 @@ function occupied(items : Item[], pos : Vector2, dpi : number) : boolean {
 function distance(pos1 : Vector2, pos2 : Vector2) : number {
     return Math.sqrt((pos1.x - pos2.x) ** 2 + (pos1.y - pos2.y) ** 2);
 }
+// Rotate a point anticlockwise, and then return its x coordinate.
+// Angle is in degrees.
+function rotateToX(pos : Vector2, angle : number) : number {
+    return Math.cos(degToRad(angle))*pos.x - Math.sin(degToRad(angle))*pos.y
+}
+function toHexCoord(pos : Vector2, vertical : boolean) : [number, number, number] {
+    // Rotate each axis on the cube coordinate system to find it on the square system.
+    // https://www.redblobgames.com/grids/hexagons/#coordinates-cube
+    if (vertical) {
+        return [pos.x, rotateToX(pos, 240), rotateToX(pos,120)]
+    }
+    return [rotateToX(pos, 330), rotateToX(pos, 210), rotateToX(pos,90)]
+}
 // The number of actions it would take to go from pos1 to pos2.
 //
 // O(1); does not do any simulation, and does not consider obstructions.
@@ -74,6 +87,20 @@ function distanceInActions(grid : OBR.Grid, pos1 : Vector2, pos2 : Vector2) : nu
             const delta_x = Math.abs(pos1.x - pos2.x) / grid.dpi;
             const delta_y = Math.abs(pos1.y - pos2.y) / grid.dpi;
             return Math.max(delta_x, delta_y);
+        }
+        case "HEX_VERTICAL": {
+            const hexPos1 = toHexCoord(pos1, true);
+            const hexPos2 = toHexCoord(pos2, true);
+            return Math.max(Math.abs(hexPos1[0] - hexPos2[0]),
+                            Math.abs(hexPos1[0] - hexPos2[0]),
+                            Math.abs(hexPos1[0] - hexPos2[0]));
+        }
+        case "HEX_HORIZONTAL": {
+            const hexPos1 = toHexCoord(pos1, false);
+            const hexPos2 = toHexCoord(pos2, false);
+            return Math.max(Math.abs(hexPos1[0] - hexPos2[0]),
+                            Math.abs(hexPos1[0] - hexPos2[0]),
+                            Math.abs(hexPos1[0] - hexPos2[0]));
         }
     }
     // Should never reach here.
@@ -89,11 +116,11 @@ type SquareAction = {
 }
 type HexVertAction = {
     gridType : "HEX_VERTICAL";
-    movement : "Stand" | "UL" | "L" | "DL" | "DR" | "R" | "UR";
+    movement : "Stand" | "U" | "UL" | "DL" | "D" | "DR" | "UR";
 }
 type HexHorizAction = {
     gridType : "HEX_HORIZONTAL";
-    movement : "Stand" | "U" | "UL" | "DL" | "D" | "DR" | "UR";
+    movement : "Stand" | "UL" | "L" | "DL" | "DR" | "R" | "UR";
 }
 type DimetricAction = {
     gridType : "DIMETRIC";
@@ -105,47 +132,85 @@ type IsometricAction = {
 }
 
 function push(speed : number, pos : Vector2, action : Action) : Vector2 {
-    let newPos = { x: 0, y: 0 };
-    Object.assign(newPos, pos);
+    const nn = neighbors(action.gridType, speed, pos);
+    let directionMap = new Map();
+    directionMap.set("Stand", pos);
     switch (action.gridType) {
+        case "SQUARE":
+            directionMap.set("N" , nn[0]);
+            directionMap.set("NW", nn[1]);
+            directionMap.set("W" , nn[2]);
+            directionMap.set("SW", nn[3]);
+            directionMap.set("S" , nn[4]);
+            directionMap.set("SE", nn[5]);
+            directionMap.set("E" , nn[6]);
+            directionMap.set("NE", nn[7]);
+            break;
+        case "HEX_VERTICAL":
+            directionMap.set("U" , nn[0]);
+            directionMap.set("UL", nn[1]);
+            directionMap.set("DL", nn[2]);
+            directionMap.set("D" , nn[4]);
+            directionMap.set("DR", nn[3]);
+            directionMap.set("UR", nn[5]);
+            break;
+        case "HEX_HORIZONTAL":
+            directionMap.set("UL", nn[0]);
+            directionMap.set("L" , nn[1]);
+            directionMap.set("DL", nn[2]);
+            directionMap.set("DR", nn[3]);
+            directionMap.set("R" , nn[4]);
+            directionMap.set("UR", nn[5]);
+            break;
+
+        // TODO
+    }
+    return directionMap.get(action.movement);
+}
+function roundTo(toRound : number, to : number) {
+    return Math.round(toRound / to) * to;
+}
+function angleToAction(angle : number, gridType : GridType) : Action {
+    let result = "";
+    switch (gridType) {
         case "SQUARE": {
-            switch (action.movement) {
-                case "Stand":                                       break;
-                case "N"    :                    newPos.y -= speed; break;
-                case "NW"   : newPos.x -= speed; newPos.y -= speed; break;
-                case "W"    : newPos.x -= speed;                    break;
-                case "SW"   : newPos.x -= speed; newPos.y += speed; break;
-                case "S"    :                    newPos.y += speed; break;
-                case "SE"   : newPos.x += speed; newPos.y += speed; break;
-                case "E"    : newPos.x += speed;                    break;
-                case "NE"   : newPos.x += speed; newPos.y -= speed; break;
-            }
+            switch (roundTo(angle, 45)) {
+                case 90 : result = "N" ; break;
+                case 135: result = "NW"; break;
+                case 180: result = "W" ; break;
+                case 225: result = "SW"; break;
+                case 270: result = "S" ; break;
+                case 315: result = "SE"; break;
+                case 0  : result = "E" ; break;
+                case 360: result = "E" ; break;
+                case 45 : result = "NE"; break;
+            } break;
+        }
+        case "HEX_VERTICAL": {
+            switch (roundTo(angle, 60)) {
+                case 90 : result = "U" ; break;
+                case 150: result = "UL"; break;
+                case 210: result = "DL"; break;
+                case 270: result = "D" ; break;
+                case 330: result = "DR"; break;
+                case 30 : result = "UR"; break;
+            } break;
+        }
+        case "HEX_HORIZONTAL": {
+            switch (roundTo(angle, 60)) {
+                case 120: result = "UL"; break;
+                case 180: result = "L" ; break;
+                case 240: result = "DL"; break;
+                case 300: result = "DR"; break;
+                case 0  : result = "R" ; break;
+                case 360: result = "R" ; break;
+                case 60 : result = "UR"; break;
+            } break;
         }
         // TODO
     }
-    return newPos;
-}
-function angleToAction(angle : number, gridType : GridType) : Action {
-    const x = Math.round(Math.cos(angle));
-    const y = -Math.round(Math.sin(angle));
-
-    let result = "";
-    switch (gridType) {
-        case "SQUARE":
-            switch (y) {
-                case  1: result += "N"; break;
-                case  0:                break;
-                case -1: result += "S"; break;
-            }
-            switch (x) {
-                case  1: result += "E"; break;
-                case  0:                break;
-                case -1: result += "W"; break;
-            }
-        // TODO
-    }
-    if (result == "") { return { gridType : gridType, movement : "Stand" }; }
-    return { gridType : gridType, movement : result } as Action;
+    if (result == "") { return { gridType: gridType, movement: "Stand" }; }
+    return { gridType: gridType, movement: result } as Action;
 }
 
 type Strategy<ai> = (items : Item[], pos : Vector2, npcAI : ai, grid : OBR.Grid) => Action[];
@@ -183,7 +248,8 @@ function findPos(pos : Vector2, vv : [Vector2, Vector2, number][])
 // Inserts such that the resulting list, if initially so, will be in descending
 // order of the first element of each tuple.
 function sortedInsert<A>(v : A, vv : A[], f : (v1 : A, v2 : A) => boolean)
-    : A[] {
+    : A[]
+{
     for (let i = 0; i < vv.length; i++) {
         if (f(vv[i], v)) {
             return vv.toSpliced(i, 0, v);
@@ -222,11 +288,10 @@ function aStar(items : Item[], grid : OBR.Grid, pos : Vector2, target : Vector2,
         if (current === undefined) { break; }
         closed.push(current);
         if (distanceInActions(grid, current[0], target) < 1) {
-            // TODO rename
             return tracePath(grid.type, closed, current[0], pos);
         }
 
-        for (const n of neighbors(grid, current[0])) {
+        for (const n of neighbors(grid.type, grid.dpi, current[0])) {
             if (occupied(items, n, grid.dpi)
                 && ! (distanceInActions(grid, n, target) <= surroundLevel + 0.5))
             { continue; }
@@ -253,41 +318,26 @@ function aStar(items : Item[], grid : OBR.Grid, pos : Vector2, target : Vector2,
     }
     return [{ gridType : grid.type, movement : "Stand" }];
 }
-function getSurroundLevel(items : Item[], grid : OBR.Grid, target : Vector2) : number {
-    let level = 0;
-    while (checkSurrounded(items, grid, target, level + 1)) {
-        level++;
-    }
-    return level;
+function reached(vv : Vector2[], v : Vector2) : boolean {
+    return vv.some((v2) => v.x == v2.x && v.y == v2.y);
 }
-function checkSurrounded(items : Item[], grid : OBR.Grid, target : Vector2,
-    level : number) : boolean
-{
-    const dpi = grid.dpi;
-
-    // TODO other grids
-    // Checking the perimeter only of a square with side length level.
-    for (let i = -level; i <= level; i++) {
-        if (! occupied(items, { x: target.x + i * dpi, y: target.y + level * dpi }, grid.dpi)) {
-            return false;
+function getSurroundLevel(items : Item[], grid : OBR.Grid, target : Vector2) : number {
+    let frontier : Vector2[] = [target];
+    while (true) {
+        const current = frontier.shift()
+        if (current === undefined) {
+            // Frontier shouldn't ever be empty, as we're always adding elements
+            return 0;
+        }
+        for (const n of neighbors(grid.type, grid.dpi, current)) {
+            if (! occupied(items, n, grid.dpi)) {
+                return distanceInActions(grid, target, n) - 1;
+            }
+            if (! reached(frontier, n)) {
+                frontier.push(n);
+            }
         }
     }
-    for (let i = -level; i <= level; i++) {
-        if (! occupied(items, { x: target.x + i * dpi, y: target.y - level * dpi }, grid.dpi)) {
-            return false;
-        }
-    }
-    for (let i = -level; i <= level; i++) {
-        if (! occupied(items, { x: target.x + level * dpi, y: target.y + i * dpi }, grid.dpi)) {
-            return false;
-        }
-    }
-    for (let i = -level; i <= level; i++) {
-        if (! occupied(items, { x: target.x - level * dpi, y: target.y + i * dpi }, grid.dpi)) {
-            return false;
-        }
-    }
-    return true;
 }
 // If there is no valid path, will return a single stand action.
 function tracePath(gridType : GridType, from : [Vector2, Vector2, number][],
@@ -312,21 +362,31 @@ function tracePath(gridType : GridType, from : [Vector2, Vector2, number][],
 function degToRad(deg : number) : number {
     return Math.PI/180 * deg;
 }
-function neighbors(grid : OBR.Grid, pos : Vector2) : Vector2[] {
+function neighbors(gridType : GridType, dpi : number, pos : Vector2) : Vector2[] {
     let relPos : Vector2[] = [];
-    switch (grid.type) {
+    switch (gridType) {
         case "SQUARE":
             relPos = [
-                { x:  1, y:  0 },
-                { x: -1, y:  0 },
-                { x:  0, y:  1 },
                 { x:  0, y: -1 },
-                { x:  1, y:  1 },
+                { x: -1, y: -1 },
+                { x: -1, y:  0 },
                 { x: -1, y:  1 },
-                { x:  1, y: -1 },
-                { x: -1, y: -1 }
+                { x:  0, y:  1 },
+                { x:  1, y:  1 },
+                { x:  1, y:  0 },
+                { x:  1, y: -1 }
             ]; break;
+        case "HEX_VERTICAL": {
+            const angles = [90, 150, 210, 270, 330, 30].map(degToRad);
+            relPos = angles.map((a) => { return { x: Math.cos(a), y: Math.sin(a) } });
+            break;
+        }
+        case "HEX_HORIZONTAL": {
+            const angles = [120, 180, 240, 300, 0, 60].map(degToRad);
+            relPos = angles.map((a) => { return { x: Math.cos(a), y: Math.sin(a) } });
+            break;
+        }
         //TODO
     }
-    return relPos.map((r) => { return {x: r.x * grid.dpi + pos.x, y: r.y * grid.dpi + pos.y }; });
+    return relPos.map((r) => { return {x: r.x * dpi + pos.x, y: r.y * dpi + pos.y }; });
 }
