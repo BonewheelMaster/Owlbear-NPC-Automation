@@ -1,6 +1,6 @@
 {
-    "name": "NPC-Automation",
-    "version": "0.1.0",
+    "name": "NPC Automation",
+    "version": "0.9.0",
     "manifest_version": 1,
     "description": "Automate the movement of simple NPCs.",
     "icon": "https://bonewheelmaster.github.io/Owlbear-NPC-Automation/icon.png",
