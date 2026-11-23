@@ -40,7 +40,7 @@ function move(items : Item[], n : NPC, grid : OBR.Grid) : Vector2 {
         if (action === undefined) { break; }
 
         newPosTry = push(grid.dpi, newPos, action);
-        if (occupied(items, newPosTry, grid.dpi)) { break; }
+        if (occupied(items, newPosTry, grid)) { break; }
         newPos = newPosTry;
     }
     return newPos;
@@ -56,8 +56,8 @@ async function snapAllNPCs(items : Item[]) : Promise<Item[]> {
 // Does not snap items to grid.
 //
 // A position is occupied if there is an item within half dpi of it.
-function occupied(items : Item[], pos : Vector2, dpi : number) : boolean {
-    return items.some((i) => i.layer == "CHARACTER" && distance(i.position, pos) <= dpi / 2);
+function occupied(items : Item[], pos : Vector2, grid : OBR.Grid) : boolean {
+    return items.some((i) => i.layer == "CHARACTER" && distanceInActions(grid, i.position, pos) < 0.5);
 }
 
 function distance(pos1 : Vector2, pos2 : Vector2) : number {
@@ -88,19 +88,20 @@ function distanceInActions(grid : OBR.Grid, pos1 : Vector2, pos2 : Vector2) : nu
             const delta_y = Math.abs(pos1.y - pos2.y) / grid.dpi;
             return Math.max(delta_x, delta_y);
         }
-        case "HEX_VERTICAL": {
-            const hexPos1 = toHexCoord(pos1, true);
-            const hexPos2 = toHexCoord(pos2, true);
-            return Math.max(Math.abs(hexPos1[0] - hexPos2[0]),
-                            Math.abs(hexPos1[0] - hexPos2[0]),
-                            Math.abs(hexPos1[0] - hexPos2[0]));
-        }
+        // TODO broken
         case "HEX_HORIZONTAL": {
             const hexPos1 = toHexCoord(pos1, false);
             const hexPos2 = toHexCoord(pos2, false);
-            return Math.max(Math.abs(hexPos1[0] - hexPos2[0]),
-                            Math.abs(hexPos1[0] - hexPos2[0]),
-                            Math.abs(hexPos1[0] - hexPos2[0]));
+            return Math.max(Math.abs(hexPos1[0] - hexPos2[0]) / grid.dpi,
+                            Math.abs(hexPos1[1] - hexPos2[1]) / grid.dpi,
+                            Math.abs(hexPos1[2] - hexPos2[2]) / grid.dpi);
+        }
+        case "HEX_VERTICAL": {
+            const hexPos1 = toHexCoord(pos1, true);
+            const hexPos2 = toHexCoord(pos2, true);
+            return Math.max(Math.abs(hexPos1[0] - hexPos2[0]) / grid.dpi,
+                            Math.abs(hexPos1[1] - hexPos2[1]) / grid.dpi,
+                            Math.abs(hexPos1[2] - hexPos2[2]) / grid.dpi);
         }
     }
     // Should never reach here.
@@ -112,14 +113,14 @@ type Action = SquareAction | HexVertAction | HexHorizAction | DimetricAction
 
 type SquareAction = {
     gridType : "SQUARE";
-    movement : "Stand" | "N" | "NW" | "W" | "SW" | "S" | "SE" | "E" | "NE";
-}
-type HexVertAction = {
-    gridType : "HEX_VERTICAL";
-    movement : "Stand" | "U" | "UL" | "DL" | "D" | "DR" | "UR";
+    movement : "Stand" | "N" | "W" | "S" | "E" | "NW" | "SW" | "SE" | "NE";
 }
 type HexHorizAction = {
     gridType : "HEX_HORIZONTAL";
+    movement : "Stand" | "U" | "UL" | "DL" | "D" | "DR" | "UR";
+}
+type HexVertAction = {
+    gridType : "HEX_VERTICAL";
     movement : "Stand" | "UL" | "L" | "DL" | "DR" | "R" | "UR";
 }
 type DimetricAction = {
@@ -138,23 +139,23 @@ function push(speed : number, pos : Vector2, action : Action) : Vector2 {
     switch (action.gridType) {
         case "SQUARE":
             directionMap.set("N" , nn[0]);
-            directionMap.set("NW", nn[1]);
-            directionMap.set("W" , nn[2]);
-            directionMap.set("SW", nn[3]);
-            directionMap.set("S" , nn[4]);
-            directionMap.set("SE", nn[5]);
-            directionMap.set("E" , nn[6]);
+            directionMap.set("W" , nn[1]);
+            directionMap.set("S" , nn[2]);
+            directionMap.set("E" , nn[3]);
+            directionMap.set("NW", nn[4]);
+            directionMap.set("SW", nn[5]);
+            directionMap.set("SE", nn[6]);
             directionMap.set("NE", nn[7]);
             break;
-        case "HEX_VERTICAL":
+        case "HEX_HORIZONTAL":
             directionMap.set("U" , nn[0]);
             directionMap.set("UL", nn[1]);
             directionMap.set("DL", nn[2]);
-            directionMap.set("D" , nn[4]);
-            directionMap.set("DR", nn[3]);
+            directionMap.set("D" , nn[3]);
+            directionMap.set("DR", nn[4]);
             directionMap.set("UR", nn[5]);
             break;
-        case "HEX_HORIZONTAL":
+        case "HEX_VERTICAL":
             directionMap.set("UL", nn[0]);
             directionMap.set("L" , nn[1]);
             directionMap.set("DL", nn[2]);
@@ -170,43 +171,41 @@ function push(speed : number, pos : Vector2, action : Action) : Vector2 {
 function roundTo(toRound : number, to : number) {
     return Math.round(toRound / to) * to;
 }
+// Angle is in degrees
 function angleToAction(angle : number, gridType : GridType) : Action {
     let result = "";
     switch (gridType) {
-        case "SQUARE": {
+        case "SQUARE":
             switch (roundTo(angle, 45)) {
-                case 90 : result = "N" ; break;
-                case 135: result = "NW"; break;
-                case 180: result = "W" ; break;
-                case 225: result = "SW"; break;
-                case 270: result = "S" ; break;
-                case 315: result = "SE"; break;
-                case 0  : result = "E" ; break;
-                case 360: result = "E" ; break;
-                case 45 : result = "NE"; break;
+                case   90: result = "N" ; break;
+                case  180: result = "W" ; break;
+                case -180: result = "W" ; break;
+                case - 90: result = "S" ; break;
+                case    0: result = "E" ; break;
+                case  135: result = "NW"; break;
+                case -135: result = "SW"; break;
+                case - 45: result = "SE"; break;
+                case   45: result = "NE"; break;
             } break;
-        }
-        case "HEX_VERTICAL": {
-            switch (roundTo(angle, 60)) {
-                case 90 : result = "U" ; break;
-                case 150: result = "UL"; break;
-                case 210: result = "DL"; break;
-                case 270: result = "D" ; break;
-                case 330: result = "DR"; break;
-                case 30 : result = "UR"; break;
+        case "HEX_HORIZONTAL":
+            switch (roundTo(angle, 30)) {
+                case  90 : result = "U" ; break;
+                case  150: result = "UL"; break;
+                case -150: result = "DL"; break;
+                case - 90: result = "D" ; break;
+                case - 30: result = "DR"; break;
+                case   30: result = "UR"; break;
             } break;
-        }
-        case "HEX_HORIZONTAL": {
-            switch (roundTo(angle, 60)) {
-                case 120: result = "UL"; break;
-                case 180: result = "L" ; break;
-                case 240: result = "DL"; break;
-                case 300: result = "DR"; break;
-                case 0  : result = "R" ; break;
-                case 360: result = "R" ; break;
-                case 60 : result = "UR"; break;
+        case "HEX_VERTICAL":
+            switch (roundTo(angle, 30)) {
+                case  120: result = "UL"; break;
+                case  180: result = "L" ; break;
+                case -180: result = "L" ; break;
+                case -120: result = "DL"; break;
+                case - 60: result = "DR"; break;
+                case    0: result = "R" ; break;
+                case   60: result = "UR"; break;
             } break;
-        }
         // TODO
     }
     if (result == "") { return { gridType: gridType, movement: "Stand" }; }
@@ -218,10 +217,12 @@ type Strategy<ai> = (items : Item[], pos : Vector2, npcAI : ai, grid : OBR.Grid)
 const meleeBasic : Strategy<npc.MeleeAI> = (items, pos, nai, grid) => {
     return rangedBasic(items, pos, { ...nai, kind: npc.RANGED, range: 5 }, grid); // TODO hardcoded step size
 };
-// Looks for the path for a max half a second. This is so we don't look for the target forever.
+// Looks for the path for up to half a second. This is so we don't look for the target forever.
 const rangedBasic : Strategy<npc.RangedAI> = (items, pos, nai, grid) => {
     const target = util.getTarget(items, nai.target);
     if (target === null) { return [{ gridType : grid.type, movement : "Stand" }]; }
+    //console.log("dist: " + distanceInActions(grid, pos, target.position));
+    //console.log(toHexCoord(pos, false));
 
     const actions = aStar(items, grid, pos, target.position, 0.5);
     // We only wish to get within range.
@@ -272,6 +273,7 @@ function aStar(items : Item[], grid : OBR.Grid, pos : Vector2, target : Vector2,
 {
     const startTime      = Date.now();
     const surroundLevel  = getSurroundLevel(items, grid, target);
+    //console.log("surround: " + surroundLevel);
     const comparisonFunc = (v : [Vector2, any, number], n : [Vector2, any, number]) =>
            distanceInActions(grid, v[0], target) + v[2]
         <= distanceInActions(grid, n[0], target) + n[2]
@@ -292,7 +294,7 @@ function aStar(items : Item[], grid : OBR.Grid, pos : Vector2, target : Vector2,
         }
 
         for (const n of neighbors(grid.type, grid.dpi, current[0])) {
-            if (occupied(items, n, grid.dpi)
+            if (occupied(items, n, grid)
                 && ! (distanceInActions(grid, n, target) <= surroundLevel + 0.5))
             { continue; }
             const newCost = distanceInActions(grid, current[0], n) + current[2];
@@ -330,8 +332,12 @@ function getSurroundLevel(items : Item[], grid : OBR.Grid, target : Vector2) : n
             return 0;
         }
         for (const n of neighbors(grid.type, grid.dpi, current)) {
-            if (! occupied(items, n, grid.dpi)) {
-                return distanceInActions(grid, target, n) - 1;
+            if (! occupied(items, n, grid)) {
+                //console.log("total " + total);
+                //console.log(n);
+                const a = distanceInActions(grid, target, n) - 1
+                //console.log(a);
+                return Math.round(a);
             }
             if (! reached(frontier, n)) {
                 frontier.push(n);
@@ -346,47 +352,54 @@ function tracePath(gridType : GridType, from : [Vector2, Vector2, number][],
     let currentPos = target;
     let path       = [];
 
+    //console.log(from);
     while (currentPos != pos) {
         const prevPos = findPos(currentPos, from);
 
         if (prevPos !== null) {
-            const angle = Math.atan2(currentPos.y - prevPos[1].y, currentPos.x - prevPos[1].x);
-            path.push(angleToAction(angle, gridType));
+            //                       Negative because owlbear's y axis is flipped.
+            const angle = Math.atan2(-(currentPos.y - prevPos[1].y), currentPos.x - prevPos[1].x);
+            path.push(angleToAction(radToDeg(angle), gridType));
             currentPos = prevPos[1];
         }
         else { return [{ gridType : gridType, movement : "Stand" }]; }
     }
     path.reverse();
+    //console.log(path);
     return path;
 }
 function degToRad(deg : number) : number {
     return Math.PI/180 * deg;
+}
+function radToDeg(rad : number) : number {
+    return 180/Math.PI * rad
 }
 function neighbors(gridType : GridType, dpi : number, pos : Vector2) : Vector2[] {
     let relPos : Vector2[] = [];
     switch (gridType) {
         case "SQUARE":
             relPos = [
-                { x:  0, y: -1 },
-                { x: -1, y: -1 },
-                { x: -1, y:  0 },
-                { x: -1, y:  1 },
                 { x:  0, y:  1 },
-                { x:  1, y:  1 },
+                { x: -1, y:  0 },
+                { x:  0, y: -1 },
                 { x:  1, y:  0 },
-                { x:  1, y: -1 }
+                { x: -1, y:  1 },
+                { x: -1, y: -1 },
+                { x:  1, y: -1 },
+                { x:  1, y:  1 }
             ]; break;
-        case "HEX_VERTICAL": {
+        case "HEX_HORIZONTAL": {
             const angles = [90, 150, 210, 270, 330, 30].map(degToRad);
             relPos = angles.map((a) => { return { x: Math.cos(a), y: Math.sin(a) } });
             break;
         }
-        case "HEX_HORIZONTAL": {
+        case "HEX_VERTICAL": {
             const angles = [120, 180, 240, 300, 0, 60].map(degToRad);
             relPos = angles.map((a) => { return { x: Math.cos(a), y: Math.sin(a) } });
             break;
         }
         //TODO
     }
-    return relPos.map((r) => { return {x: r.x * dpi + pos.x, y: r.y * dpi + pos.y }; });
+    //             Negative because Owlbear's y axis is flipped V
+    return relPos.map((r) => { return {x: r.x * dpi + pos.x, y: -r.y * dpi + pos.y }; });
 }
