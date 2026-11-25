@@ -18,7 +18,6 @@ export async function moveAll() : Promise<void> {
     OBR.setItems(items, newItems);
 }
 export async function moveOne(n : NPC) : Promise<void> {
-    console.log("moving");
     const [items, grid] = await Promise.all([OBR.getItems(), OBR.getGrid()]);
 
     const newPos = await OBR.snapToGrid(n.position);
