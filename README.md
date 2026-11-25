@@ -31,6 +31,10 @@ settings, move it or disable it.
 To set an NPC's target, find the ID of the target (right click and press show ID).
 An example of an ID is `3d93594f-0f25-4b11-916f-f50badc68cb5`.
 
+There are currently two strategies available: melee and ranged. Melee attempts to
+get as close as possible to the target; ranged will stop moving when within
+the specified range.
+
 # Performance
 
 The efficient A* algorithm is used. However, performance can still be an issue
