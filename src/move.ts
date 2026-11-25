@@ -18,9 +18,11 @@ export async function moveAll() : Promise<void> {
     OBR.setItems(items, newItems);
 }
 export async function moveOne(n : NPC) : Promise<void> {
+    console.log("moving");
     const [items, grid] = await Promise.all([OBR.getItems(), OBR.getGrid()]);
 
-    OBR.updateItems(() => { return { ...n, position: move(items, n, grid) }; }, [n]);
+    const newPos = await OBR.snapToGrid(n.position);
+    OBR.setItems([n], [{ ...n, position: move(items, { ...n, position: newPos }, grid) }]);
 }
 function move(items : Item[], n : NPC, grid : OBR.Grid) : Vector2 {
     const actions = (() => {

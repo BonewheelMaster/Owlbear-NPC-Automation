@@ -3,6 +3,7 @@ import { Item } from "@owlbear-rodeo/sdk";
 
 import * as pre from "./prelude";
 
+import * as move from "./move";
 import { NPC, NPCAI, NPCAIType } from "./npc";
 import * as npc from "./npc";
 import * as util from "./util";
@@ -10,6 +11,10 @@ import * as util from "./util";
 async function getSelectedNPCs() : Promise<NPC[]> {
     const selection = await OBR.getSelection();
     return util.filterNPCs(selection);
+}
+async function moveSelectedNPCs() : Promise<void> {
+    const selNPCs = await getSelectedNPCs();
+    selNPCs.forEach(move.moveOne);
 }
 async function removeSelectedNPCs() : Promise<void> {
     const selNPCs = await getSelectedNPCs();
@@ -39,8 +44,14 @@ function getNPCSettings(NPCs : NPC[])
     return "Disagreed";
 }
 async function main() : Promise<void> {
+    makeMoveButton();
     makeMenu();
     makeDisableButton();
+}
+function makeMoveButton() : void {
+    let button = document.getElementById("moveButton");
+    if (button === null) { return; }
+    button.addEventListener("click", moveSelectedNPCs);
 }
 async function makeMenu() : Promise<void> {
     let form = document.getElementById("form");
