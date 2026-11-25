@@ -1,4 +1,8 @@
 # Owlbear NPC Automation
+<img src="https://github.com/BonewheelMaster/Owlbear-NPC-Automation/blob/main/img/turn1.png?raw=true"
+  width="600">
+<img src="https://github.com/BonewheelMaster/Owlbear-NPC-Automation/blob/main/img/turn2.png?raw=true"
+  width="600">
 
 This is an extension for Owlbear Rodeo that allows you to automatically move
 tokens (NPCs) toward other tokens, if there is a path. This is useful in combat
